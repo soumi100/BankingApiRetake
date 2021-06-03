@@ -5,6 +5,8 @@
  */
 package io.swagger.api;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.model.Account;
 import io.swagger.model.Body;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,24 +22,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.CookieValue;
 
 import javax.validation.Valid;
-import javax.validation.constraints.*;
 import java.util.List;
-import java.util.Map;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T11:15:57.209Z[GMT]")
 @Validated
 public interface AccountApi {
 
-    @Operation(summary = "Delete existing account", description = "", tags={ "Accounts" })
+    /* @Operation(summary = "Delete existing account", description = "", tags={ "Accounts" })
     @ApiResponses(value = { 
         @ApiResponse(responseCode = "200", description = "account has been deleted", content = @Content(schema = @Schema(implementation = Account.class))),
         
@@ -46,38 +42,71 @@ public interface AccountApi {
         @ApiResponse(responseCode = "401", description = "Access token is missing or invalid"),
         
         @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = @Content(schema = @Schema(implementation = String.class))) })
-    @RequestMapping(value = "/account/delete/{IBAN}",
+    @RequestMapping(value = "/Accounts/delete/{IBAN}",
         produces = { "application/json" }, 
         method = RequestMethod.DELETE)
-    ResponseEntity<Account> deleteAccountByIBAN(@Parameter(in = ParameterIn.PATH, description = "IBAN of the account to be deleted", required=true, schema=@Schema()) @PathVariable("IBAN") String IBAN);
-
+    Account deleteAccountByIBAN(@Parameter(in = ParameterIn.PATH, description = "IBAN of the account to be deleted",
+            required=true, schema=@Schema()) @PathVariable("IBAN") String IBAN); */
+    @ApiOperation(value = "Deactivate Account", nickname = "deactivateAccount", notes = "Deactivates an Account", tags={ "Accounts", })
+    @io.swagger.annotations.ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 200, message = "Succesfull"),
+            @io.swagger.annotations.ApiResponse(code = 400, message = "bad request", response = String.class),
+            @io.swagger.annotations.ApiResponse(code = 401, message = "API key is missing or invalid"),
+            @io.swagger.annotations.ApiResponse(code = 404, message = "The specified resource was not found", response = String.class) })
+    @RequestMapping(value = "/Accounts/deactivate/{iban}",
+            produces = { "application/json" },
+            method = RequestMethod.PUT)
+    ResponseEntity deactivateAccount(@ApiParam(value = "IBAN to deactivate",required=true) @PathVariable("iban") String iban
+    );
 
     @Operation(summary = "get the account with the specific IBAN", description = "", tags={ "Accounts" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "the articles", content = @Content(schema = @Schema(implementation = Account.class))),
-        
-        @ApiResponse(responseCode = "400", description = "bad input parameter") })
-    @RequestMapping(value = "/account/{IBAN}",
+    @io.swagger.annotations.ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 200, message = "list of returned accounts"),
+            @io.swagger.annotations.ApiResponse(code = 400, message = "bad request"),
+            @io.swagger.annotations.ApiResponse(code = 409, message = "already exists"),
+            @io.swagger.annotations.ApiResponse(code = 404, message = "The specified resource was not found") })
+    @RequestMapping(value = "/Accounts/{IBAN}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<Account> getAccountByIBAN(@Parameter(in = ParameterIn.PATH, description = "IBAN of the account to return", required=true, schema=@Schema()) @PathVariable("IBAN") String IBAN);
+    ResponseEntity<Account> getAccountByIBAN(@Parameter(in = ParameterIn.PATH, description = "IBAN of the account to return",
+            required=true, schema=@Schema()) @PathVariable("IBAN") String IBAN) throws NotFoundException;
 
 
     @Operation(summary = "update the given account", description = "update account type", security = {
         @SecurityRequirement(name = "bearerAuth")    }, tags={ "Accounts" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "account has been updated", content = @Content(schema = @Schema(implementation = Account.class))),
-        
-        @ApiResponse(responseCode = "400", description = "bad request", content = @Content(schema = @Schema(implementation = String.class))),
-        
-        @ApiResponse(responseCode = "401", description = "Access token is missing or invalid"),
-        
-        @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = @Content(schema = @Schema(implementation = String.class))) })
+    @io.swagger.annotations.ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 200, message = "list of returned accounts"),
+            @io.swagger.annotations.ApiResponse(code = 400, message = "bad request"),
+            @io.swagger.annotations.ApiResponse(code = 409, message = "already exists"),
+            @io.swagger.annotations.ApiResponse(code = 404, message = "The specified resource was not found") })
     @RequestMapping(value = "/account/update/",
         produces = { "application/json" }, 
         consumes = { "application/json" }, 
         method = RequestMethod.PUT)
     ResponseEntity<Account> updateAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody Body body);
+
+   @Operation(summary = "create new account", description = "Calling this will create new account", security = {
+           @SecurityRequirement(name = "bearerAuth")    }, tags={ "Accounts" })
+    @io.swagger.annotations.ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 201, message = "item created"),
+            @io.swagger.annotations.ApiResponse(code = 400, message = "invalid input"),
+            @io.swagger.annotations.ApiResponse(code = 409, message = "already exists") })
+    @RequestMapping(value = "/Accounts/new",
+            consumes = { "application/json" },
+            method = RequestMethod.POST)
+    ResponseEntity<Account> addAccount(@ApiParam(value = ""  )  @Valid @RequestBody Account account);
+
+    @Operation(summary = "get accounts with an offset", description = "Calling this allows you to fetch all accounts", security = {
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Accounts" })
+    @io.swagger.annotations.ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 200, message = "list of returned accounts"),
+            @io.swagger.annotations.ApiResponse(code = 400, message = "bad request"),
+            @io.swagger.annotations.ApiResponse(code = 409, message = "already exists"),
+            @io.swagger.annotations.ApiResponse(code = 404, message = "The specified resource was not found") })
+    @RequestMapping(value = "/Accounts",
+            produces = { "application/json" },
+            method = RequestMethod.GET)
+    ResponseEntity<List<Account>> getAccounts(@Parameter(in = ParameterIn.QUERY, description = "The maximum numbers of items to return, exl" ,schema=@Schema()) @Valid @RequestParam(value = "limit", required = false) Integer limit);
 
 }
 
