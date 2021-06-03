@@ -67,13 +67,9 @@ public class UsersApiController implements UsersApi {
                                                @Parameter(in = ParameterIn.QUERY, description = "Get users based on Last Name" ,
                                                        schema=@Schema()) @Valid @RequestParam(value = "lastname", required = false) String lastname,
                                                @Parameter(in = ParameterIn.QUERY, description = "Maximum numbers of items to return" ,
-                                                       schema=@Schema()) @Valid @RequestParam(value = "limit", required = false) Integer limit) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            return new ResponseEntity<List<User>>(userService.getAllUser(), HttpStatus.OK);
-        }
-
-        return new ResponseEntity<List<User>>(HttpStatus.NOT_FOUND);
+                                                       schema=@Schema()) @Valid @RequestParam(value = "limit", required = false) Integer limit)
+    {
+        return new ResponseEntity<List<User>>(userService.getAllUser(), HttpStatus.OK);
     }
 
 }
