@@ -3,7 +3,6 @@ package io.swagger.api;
 import io.swagger.annotations.ApiParam;
 import io.swagger.model.Account;
 import io.swagger.model.AccountDto;
-import io.swagger.model.Body;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.service.AccountService;
 import org.slf4j.Logger;
@@ -40,14 +39,18 @@ public class AccountApiController implements AccountApi {
     @Override
     public ResponseEntity<List<Account>> getAccounts(@Valid Integer limit) {
         List<Account> accounts = accountService.getAccounts();
-        return new ResponseEntity<List<Account>>(accounts.subList(0,limit),HttpStatus.OK);
+        return new ResponseEntity<List<Account>>(accounts.subList(0,limit),HttpStatus.OK)
+                .status(200)
+                .body(accounts.subList(0,limit));
     }
 
 
     @Override
-    public ResponseEntity <Void> deactivateAccount(@ApiParam(value = "IBAN to deactivate",required=true) @PathVariable("IBAN") String iban) {
-         accountService.deactivateAccount(iban);
-         return  null;
+    public ResponseEntity <Account> deactivateAccount(@ApiParam(value = "IBAN to deactivate",required=true) @PathVariable("IBAN") String iban) {
+       Account account =  accountService.deactivateAccount(iban);
+        return ResponseEntity
+                .status(200)
+                .body(account);
     }
 
     @Override
@@ -60,14 +63,18 @@ public class AccountApiController implements AccountApi {
 
     @Override
     public ResponseEntity<Account> updateAccount(String IBAN, @Valid AccountDto body) {
-        accountService.updateAccount(body, IBAN);
-        return null;
+        Account account = accountService.updateAccount(body, IBAN);
+        return ResponseEntity
+                .status(200)
+                .body(account);
     }
 
     @Override
     public ResponseEntity<Account> addAccount(@Valid Account account) {
-        accountService.addAccount(account);
-        return new ResponseEntity<Account>(HttpStatus.OK);
+        Account NewAccount =  accountService.addAccount(account);
+        return ResponseEntity
+                .status(201)
+                .body(NewAccount);
     }
 
 }

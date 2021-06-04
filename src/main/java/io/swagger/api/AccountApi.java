@@ -43,7 +43,7 @@ public interface AccountApi {
     @RequestMapping(value = "/Accounts/deactivate/{IBAN}",
             produces = { "application/json" },
             method = RequestMethod.PUT)
-    ResponseEntity deactivateAccount(@ApiParam(value = "IBAN to deactivate",required=true) @PathVariable("IBAN") String iban
+    ResponseEntity<Account>  deactivateAccount(@ApiParam(value = "IBAN to deactivate",required=true) @PathVariable("IBAN") String iban
     );
 
     @Operation(summary = "get the account with the specific IBAN", description = "", tags={ "Accounts" })

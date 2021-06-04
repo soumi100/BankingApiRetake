@@ -2,6 +2,7 @@ package io.swagger.model;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ public class AccountDto {
     public Boolean active;
     public Account.CurrencyEnum currency;
     public Account.TypeEnum type;
+    // public Integer userId;
     // balance is changed via a transaction
 
 
