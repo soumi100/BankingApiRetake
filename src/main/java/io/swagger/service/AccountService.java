@@ -46,7 +46,6 @@ public class AccountService {
     {
         Account accountToUpdate = accountRepository.getAccountByIban(IBAN);
         accountToUpdate.setActive(newUpdatedAccount.getActive());
-        accountToUpdate.setBalance(newUpdatedAccount.getBalance());
         accountToUpdate.setType(newUpdatedAccount.getType());
         accountToUpdate.setCurrency(newUpdatedAccount.getCurrency());
         accountRepository.save(accountToUpdate);

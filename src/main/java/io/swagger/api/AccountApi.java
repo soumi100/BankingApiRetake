@@ -34,38 +34,26 @@ import java.util.List;
 @Validated
 public interface AccountApi {
 
-    /* @Operation(summary = "Delete existing account", description = "", tags={ "Accounts" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "account has been deleted", content = @Content(schema = @Schema(implementation = Account.class))),
-        
-        @ApiResponse(responseCode = "400", description = "bad request", content = @Content(schema = @Schema(implementation = String.class))),
-        
-        @ApiResponse(responseCode = "401", description = "Access token is missing or invalid"),
-        
-        @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = @Content(schema = @Schema(implementation = String.class))) })
-    @RequestMapping(value = "/Accounts/delete/{IBAN}",
-        produces = { "application/json" }, 
-        method = RequestMethod.DELETE)
-    Account deleteAccountByIBAN(@Parameter(in = ParameterIn.PATH, description = "IBAN of the account to be deleted",
-            required=true, schema=@Schema()) @PathVariable("IBAN") String IBAN); */
-    @ApiOperation(value = "Deactivate Account", nickname = "deactivateAccount", notes = "Deactivates an Account", tags={ "Accounts", })
+    @Operation(summary = "deactivateAccount the account with the specific IBAN", description = "", tags={ "Accounts" })
     @io.swagger.annotations.ApiResponses(value = {
             @io.swagger.annotations.ApiResponse(code = 200, message = "Succesfull"),
             @io.swagger.annotations.ApiResponse(code = 400, message = "bad request", response = String.class),
-            @io.swagger.annotations.ApiResponse(code = 401, message = "API key is missing or invalid"),
-            @io.swagger.annotations.ApiResponse(code = 404, message = "The specified resource was not found", response = String.class) })
-    @RequestMapping(value = "/Accounts/deactivate/{iban}",
+            @io.swagger.annotations.ApiResponse(code = 401, message = "Unauthorized"),
+            @io.swagger.annotations.ApiResponse(code = 404, message = "The requested resource could not be found", response = String.class) })
+    @RequestMapping(value = "/Accounts/deactivate/{IBAN}",
             produces = { "application/json" },
             method = RequestMethod.PUT)
-    ResponseEntity deactivateAccount(@ApiParam(value = "IBAN to deactivate",required=true) @PathVariable("iban") String iban
+    ResponseEntity deactivateAccount(@ApiParam(value = "IBAN to deactivate",required=true) @PathVariable("IBAN") String iban
     );
 
     @Operation(summary = "get the account with the specific IBAN", description = "", tags={ "Accounts" })
     @io.swagger.annotations.ApiResponses(value = {
-            @io.swagger.annotations.ApiResponse(code = 200, message = "list of returned accounts"),
+            @io.swagger.annotations.ApiResponse(code = 200, message = "entity corresponding to the requested resource"),
             @io.swagger.annotations.ApiResponse(code = 400, message = "bad request"),
             @io.swagger.annotations.ApiResponse(code = 409, message = "already exists"),
-            @io.swagger.annotations.ApiResponse(code = 404, message = "The specified resource was not found") })
+            @io.swagger.annotations.ApiResponse(code = 401, message = "Unauthorized"),
+            @io.swagger.annotations.ApiResponse(code = 404, message = "The requested resource could not be found")
+    })
     @RequestMapping(value = "/Accounts/{IBAN}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
@@ -73,13 +61,15 @@ public interface AccountApi {
             required=true, schema=@Schema()) @PathVariable("IBAN") String IBAN) throws NotFoundException;
 
 
-    @Operation(summary = "update the given account", description = "update account type", security = {
+    @Operation(summary = "update the given account", description = "update account ", security = {
         @SecurityRequirement(name = "bearerAuth")    }, tags={ "Accounts" })
     @io.swagger.annotations.ApiResponses(value = {
             @io.swagger.annotations.ApiResponse(code = 200, message = "list of returned accounts"),
             @io.swagger.annotations.ApiResponse(code = 400, message = "bad request"),
+            @io.swagger.annotations.ApiResponse(code = 401, message = "Unauthorized"),
             @io.swagger.annotations.ApiResponse(code = 409, message = "already exists"),
-            @io.swagger.annotations.ApiResponse(code = 404, message = "The specified resource was not found") })
+            @io.swagger.annotations.ApiResponse(code = 404, message = "The specified resource was not found")
+    })
     @RequestMapping(value = "/Accounts/update/{IBAN}",
         produces = { "application/json" }, 
         consumes = { "application/json" }, 
@@ -87,12 +77,15 @@ public interface AccountApi {
     ResponseEntity<Account> updateAccount(@Parameter(in = ParameterIn.PATH, description = "", required=true, schema=@Schema()) @PathVariable("IBAN") String IBAN
             ,@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody AccountDto body);
 
-   @Operation(summary = "create new account", description = "Calling this will create new account", security = {
+   @Operation(summary = "create new account", description = "Calling this will create a new account", security = {
            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Accounts" })
     @io.swagger.annotations.ApiResponses(value = {
-            @io.swagger.annotations.ApiResponse(code = 201, message = "item created"),
-            @io.swagger.annotations.ApiResponse(code = 400, message = "invalid input"),
-            @io.swagger.annotations.ApiResponse(code = 409, message = "already exists") })
+            @io.swagger.annotations.ApiResponse(code = 201, message = "creating a new resource."),
+            @io.swagger.annotations.ApiResponse(code = 400, message = "bad request"),
+            @io.swagger.annotations.ApiResponse(code = 401, message = "Unauthorized"),
+            @io.swagger.annotations.ApiResponse(code = 409, message = "already exists"),
+            @io.swagger.annotations.ApiResponse(code = 404, message = "The specified resource was not found")
+    })
     @RequestMapping(value = "/Accounts/new",
             consumes = { "application/json" },
             method = RequestMethod.POST)
@@ -103,8 +96,10 @@ public interface AccountApi {
     @io.swagger.annotations.ApiResponses(value = {
             @io.swagger.annotations.ApiResponse(code = 200, message = "list of returned accounts"),
             @io.swagger.annotations.ApiResponse(code = 400, message = "bad request"),
+            @io.swagger.annotations.ApiResponse(code = 401, message = "Unauthorized"),
             @io.swagger.annotations.ApiResponse(code = 409, message = "already exists"),
-            @io.swagger.annotations.ApiResponse(code = 404, message = "The specified resource was not found") })
+            @io.swagger.annotations.ApiResponse(code = 404, message = "The specified resource was not found")
+    })
     @RequestMapping(value = "/Accounts",
             produces = { "application/json" },
             method = RequestMethod.GET)

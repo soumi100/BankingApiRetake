@@ -45,7 +45,7 @@ public class AccountApiController implements AccountApi {
 
 
     @Override
-    public ResponseEntity <Void> deactivateAccount(@ApiParam(value = "IBAN to deactivate",required=true) @PathVariable("iban") String iban) {
+    public ResponseEntity <Void> deactivateAccount(@ApiParam(value = "IBAN to deactivate",required=true) @PathVariable("IBAN") String iban) {
          accountService.deactivateAccount(iban);
          return  null;
     }
