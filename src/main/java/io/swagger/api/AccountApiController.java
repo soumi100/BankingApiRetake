@@ -2,6 +2,7 @@ package io.swagger.api;
 
 import io.swagger.annotations.ApiParam;
 import io.swagger.model.Account;
+import io.swagger.model.AccountDto;
 import io.swagger.model.Body;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.service.AccountService;
@@ -58,7 +59,8 @@ public class AccountApiController implements AccountApi {
     }
 
     @Override
-    public ResponseEntity<Account> updateAccount(@Valid Body body) {
+    public ResponseEntity<Account> updateAccount(String IBAN, @Valid AccountDto body) {
+        accountService.updateAccount(body, IBAN);
         return null;
     }
 

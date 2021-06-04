@@ -2,11 +2,13 @@ package io.swagger.service;
 
 import io.swagger.api.NotFoundException;
 import io.swagger.model.Account;
+import io.swagger.model.AccountDto;
 import io.swagger.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
@@ -38,6 +40,16 @@ public class AccountService {
         Account accountToDeactivate = accountRepository.getAccountByIban(iban);
         accountToDeactivate.setActive(false);
         accountRepository.save(accountToDeactivate);
+    }
+    @PatchMapping
+    public void updateAccount(AccountDto newUpdatedAccount, String IBAN)
+    {
+        Account accountToUpdate = accountRepository.getAccountByIban(IBAN);
+        accountToUpdate.setActive(newUpdatedAccount.getActive());
+        accountToUpdate.setBalance(newUpdatedAccount.getBalance());
+        accountToUpdate.setType(newUpdatedAccount.getType());
+        accountToUpdate.setCurrency(newUpdatedAccount.getCurrency());
+        accountRepository.save(accountToUpdate);
     }
 
 }

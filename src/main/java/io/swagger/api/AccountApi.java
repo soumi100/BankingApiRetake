@@ -8,6 +8,7 @@ package io.swagger.api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.model.Account;
+import io.swagger.model.AccountDto;
 import io.swagger.model.Body;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -79,11 +80,12 @@ public interface AccountApi {
             @io.swagger.annotations.ApiResponse(code = 400, message = "bad request"),
             @io.swagger.annotations.ApiResponse(code = 409, message = "already exists"),
             @io.swagger.annotations.ApiResponse(code = 404, message = "The specified resource was not found") })
-    @RequestMapping(value = "/account/update/",
+    @RequestMapping(value = "/Accounts/update/{IBAN}",
         produces = { "application/json" }, 
         consumes = { "application/json" }, 
-        method = RequestMethod.PUT)
-    ResponseEntity<Account> updateAccount(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody Body body);
+        method = RequestMethod.PATCH)
+    ResponseEntity<Account> updateAccount(@Parameter(in = ParameterIn.PATH, description = "", required=true, schema=@Schema()) @PathVariable("IBAN") String IBAN
+            ,@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody AccountDto body);
 
    @Operation(summary = "create new account", description = "Calling this will create new account", security = {
            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Accounts" })
