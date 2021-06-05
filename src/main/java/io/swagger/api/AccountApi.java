@@ -33,7 +33,7 @@ public interface AccountApi {
             @io.swagger.annotations.ApiResponse(code = 409, message = "already exists"),
             @io.swagger.annotations.ApiResponse(code = 404, message = "The specified resource was not found")
     })
-    @RequestMapping(value = "/Accounts",
+    @RequestMapping(value = "/accounts",
             produces = { "application/json" },
             method = RequestMethod.GET)
     ResponseEntity<List<Account>> getAccounts(@Parameter(in = ParameterIn.QUERY, description = "The maximum numbers of items to return, exl" ,schema=@Schema()) @Valid @RequestParam(value = "limit", required = false) Integer limit);
@@ -47,11 +47,11 @@ public interface AccountApi {
             @io.swagger.annotations.ApiResponse(code = 401, message = "Unauthorized"),
             @io.swagger.annotations.ApiResponse(code = 404, message = "The requested resource could not be found")
     })
-    @RequestMapping(value = "/Accounts/{IBAN}",
+    @RequestMapping(value = "/accounts/{iban}",
             produces = { "application/json" },
             method = RequestMethod.GET)
     ResponseEntity<Account> getAccountByIBAN(@Parameter(in = ParameterIn.PATH, description = "IBAN of the account to return",
-            required=true, schema=@Schema()) @PathVariable("IBAN") String IBAN) throws NotFoundException;
+            required=true, schema=@Schema()) @PathVariable("iban") String IBAN) throws NotFoundException;
 
     @Operation(summary = "create new account", description = "Calling this will create a new account", security = {
             @SecurityRequirement(name = "bearerAuth")    }, tags={ "Accounts" })
@@ -62,7 +62,7 @@ public interface AccountApi {
             @io.swagger.annotations.ApiResponse(code = 409, message = "already exists"),
             @io.swagger.annotations.ApiResponse(code = 404, message = "The specified resource was not found")
     })
-    @RequestMapping(value = "/Accounts/new",
+    @RequestMapping(value = "/accounts/new",
             consumes = { "application/json" },
             method = RequestMethod.POST)
     ResponseEntity<Account> addAccount(@ApiParam(value = ""  )  @Valid @RequestBody Account account);
@@ -74,10 +74,10 @@ public interface AccountApi {
             @io.swagger.annotations.ApiResponse(code = 400, message = "bad request", response = String.class),
             @io.swagger.annotations.ApiResponse(code = 401, message = "Unauthorized"),
             @io.swagger.annotations.ApiResponse(code = 404, message = "The requested resource could not be found", response = String.class) })
-    @RequestMapping(value = "/Accounts/{IBAN}",
+    @RequestMapping(value = "/accounts/{iban}",
             produces = { "application/json" },
             method = RequestMethod.DELETE)
-    void deleteAccount(@ApiParam(value = "IBAN to delete",required=true) @PathVariable("IBAN") String IBAN
+    void deleteAccount(@ApiParam(value = "IBAN to delete",required=true) @PathVariable("iban") String iban
     );
 
 
@@ -90,11 +90,11 @@ public interface AccountApi {
             @io.swagger.annotations.ApiResponse(code = 409, message = "already exists"),
             @io.swagger.annotations.ApiResponse(code = 404, message = "The specified resource was not found")
     })
-    @RequestMapping(value = "/Accounts/update/{IBAN}",
+    @RequestMapping(value = "/accounts/update/{iban}",
             produces = { "application/json" },
             consumes = { "application/json" },
             method = RequestMethod.PUT)
-    ResponseEntity<Account> updateAccount(@Parameter(in = ParameterIn.PATH, description = "", required=true, schema=@Schema()) @PathVariable("IBAN") String IBAN
+    ResponseEntity<Account> updateAccount(@Parameter(in = ParameterIn.PATH, description = "", required=true, schema=@Schema()) @PathVariable("iban") String iban
             ,@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody AccountDto body);
 
 

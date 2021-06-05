@@ -23,8 +23,8 @@ public class AccountService {
         return (List<Account>) accountRepository.findAll();
     }
 
-    public Account getAccountByIban(String IBAN)  {
-        Account account = accountRepository.getAccountByIban(IBAN);
+    public Account getAccountByIban(String iban)  {
+        Account account = accountRepository.getAccountByIban(iban);
         return  account;
     }
 
@@ -37,21 +37,21 @@ public class AccountService {
         NewAccount.setType(account.getType());
         NewAccount.setUserId(account.getUserId());
         accountRepository.save(NewAccount);
-        return account;
+        return NewAccount;
     }
 
     @DeleteMapping
-    public void deleteAccount(String IBAN)
+    public void deleteAccount(String iban)
     {
-        Account accountToDelete = accountRepository.getAccountByIban(IBAN);
-       // accountToDelete.setDeleted(true);
+        Account accountToDelete = accountRepository.getAccountByIban(iban);
+        accountToDelete.setDeleted(true);
         accountRepository.save(accountToDelete);
     }
 
     @PutMapping
-    public Account updateAccount(AccountDto newUpdatedAccount, String IBAN)
+    public Account updateAccount(AccountDto newUpdatedAccount, String iban)
     {
-        Account accountToUpdate = accountRepository.getAccountByIban(IBAN);
+        Account accountToUpdate = accountRepository.getAccountByIban(iban);
         accountToUpdate.setActive(newUpdatedAccount.getActive());
         accountToUpdate.setType(newUpdatedAccount.getType());
         accountToUpdate.setCurrency(newUpdatedAccount.getCurrency());
@@ -61,17 +61,17 @@ public class AccountService {
 
     public String GenerateRandomIban() {
         Random random = new Random();
-        StringBuilder IBAN = new StringBuilder("NL");
+        StringBuilder iban = new StringBuilder("NL");
         for (int i = 0; i < 2; i++) {
             int num = random.nextInt(10);
-            IBAN.append(num);
+            iban.append(num);
         }
-        IBAN.append("INHO0");
+        iban.append("INHO0");
         for (int i = 0; i < 10; i++) {
             int num = random.nextInt(10);
-            IBAN.append(num);
+            iban.append(num);
         }
-        return  IBAN.toString();
+        return  iban.toString();
     }
 
 }

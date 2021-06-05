@@ -1,7 +1,6 @@
 package io.swagger.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.annotations.ApiParam;
 import io.swagger.model.Account;
 import io.swagger.model.AccountDto;
 import io.swagger.service.AccountService;
@@ -10,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,8 +44,8 @@ public class AccountApiController implements AccountApi {
 
 
     @Override
-    public ResponseEntity<Account> getAccountByIBAN(String IBAN) throws NotFoundException {
-        Account account = accountService.getAccountByIban(IBAN);
+    public ResponseEntity<Account> getAccountByIBAN(String iban) throws NotFoundException {
+        Account account = accountService.getAccountByIban(iban);
         return ResponseEntity
                 .status(200)
                 .body(account);
@@ -63,8 +61,8 @@ public class AccountApiController implements AccountApi {
 
 
     @Override
-    public void deleteAccount(String IBAN) {
-        accountService.deleteAccount(IBAN);
+    public void deleteAccount(String iban) {
+        accountService.deleteAccount(iban);
     }
 
     @Override

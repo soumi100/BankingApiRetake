@@ -27,7 +27,15 @@ public class Account   {
   @JsonProperty("userId")
   private Long userId = null;
 
+  public boolean isDeleted() {
+    return isDeleted;
+  }
 
+  public void setDeleted(boolean deleted) {
+    isDeleted = deleted;
+  }
+
+  private boolean isDeleted ;
   public Account(Long userId, TypeEnum type, CurrencyEnum currency, Boolean active, String iban, Integer balance) {
     this.userId = userId;
     this.type = type;
@@ -35,6 +43,7 @@ public class Account   {
     this.active = active;
     this.iban = iban;
     this.balance = balance;
+    this.isDeleted = false;
   }
 
   public Account() {
@@ -267,6 +276,7 @@ public class Account   {
     sb.append("    active: ").append(toIndentedString(active)).append("\n");
     sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
     sb.append("    balance: ").append(toIndentedString(balance)).append("\n");
+    sb.append("    isDeleted: ").append(toIndentedString(isDeleted)).append("\n");
     sb.append("}");
     return sb.toString();
   }
