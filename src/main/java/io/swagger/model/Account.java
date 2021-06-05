@@ -20,6 +20,28 @@ public class Account   {
   @JsonProperty("userId")
   private Long userId = null;
 
+  public boolean isDeleted() {
+    return isDeleted;
+  }
+
+  public void setDeleted(boolean deleted) {
+    isDeleted = deleted;
+  }
+
+  private boolean isDeleted ;
+  public Account(Long userId, TypeEnum type, CurrencyEnum currency, Boolean active, String iban, Integer balance) {
+    this.userId = userId;
+    this.type = type;
+    this.currency = currency;
+    this.active = active;
+    this.iban = iban;
+    this.balance = balance;
+    this.isDeleted = false;
+  }
+
+  public Account() {
+  }
+
   /**
    * Gets or Sets type
    */
