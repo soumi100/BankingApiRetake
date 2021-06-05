@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -62,9 +63,7 @@ public interface AccountApi {
             @io.swagger.annotations.ApiResponse(code = 409, message = "already exists"),
             @io.swagger.annotations.ApiResponse(code = 404, message = "The specified resource was not found")
     })
-    @RequestMapping(value = "/accounts",
-            consumes = { "application/json" },
-            method = RequestMethod.POST)
+    @RequestMapping(value = "/accounts", consumes = { "application/json" }, method = RequestMethod.POST)
     ResponseEntity<Account> addAccount(@ApiParam(value = ""  )  @Valid @RequestBody Account account);
 
 
@@ -96,8 +95,6 @@ public interface AccountApi {
             method = RequestMethod.PUT)
     ResponseEntity<Account> updateAccount(@Parameter(in = ParameterIn.PATH, description = "", required=true, schema=@Schema()) @PathVariable("iban") String iban
             ,@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody AccountDto body);
-
-
 
 }
 
