@@ -5,27 +5,17 @@
  */
 package io.swagger.api;
 
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.model.Account;
 import io.swagger.model.AccountDto;
-import io.swagger.model.Body;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -62,7 +52,7 @@ public interface AccountApi {
 
 
     @Operation(summary = "update the given account", description = "update account ", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "Accounts" })
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Accounts" })
     @io.swagger.annotations.ApiResponses(value = {
             @io.swagger.annotations.ApiResponse(code = 200, message = "list of returned accounts"),
             @io.swagger.annotations.ApiResponse(code = 400, message = "bad request"),
@@ -71,9 +61,9 @@ public interface AccountApi {
             @io.swagger.annotations.ApiResponse(code = 404, message = "The specified resource was not found")
     })
     @RequestMapping(value = "/Accounts/update/{IBAN}",
-        produces = { "application/json" }, 
-        consumes = { "application/json" }, 
-        method = RequestMethod.PATCH)
+            produces = { "application/json" },
+            consumes = { "application/json" },
+            method = RequestMethod.PATCH)
     ResponseEntity<Account> updateAccount(@Parameter(in = ParameterIn.PATH, description = "", required=true, schema=@Schema()) @PathVariable("IBAN") String IBAN
             ,@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody AccountDto body);
 
