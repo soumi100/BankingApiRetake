@@ -46,24 +46,8 @@ public class AccountApiController implements AccountApi {
 
 
     @Override
-    public ResponseEntity <Account> deactivateAccount(@ApiParam(value = "IBAN to deactivate",required=true) @PathVariable("IBAN") String iban) {
-       Account account =  accountService.deactivateAccount(iban);
-        return ResponseEntity
-                .status(200)
-                .body(account);
-    }
-
-    @Override
     public ResponseEntity<Account> getAccountByIBAN(String IBAN) throws NotFoundException {
         Account account = accountService.getAccountByIban(IBAN);
-        return ResponseEntity
-                .status(200)
-                .body(account);
-    }
-
-    @Override
-    public ResponseEntity<Account> updateAccount(String IBAN, @Valid AccountDto body) {
-        Account account = accountService.updateAccount(body, IBAN);
         return ResponseEntity
                 .status(200)
                 .body(account);
@@ -76,5 +60,24 @@ public class AccountApiController implements AccountApi {
                 .status(201)
                 .body(NewAccount);
     }
+
+
+    @Override
+    public void deleteAccount(String IBAN) {
+        accountService.deleteAccount(IBAN);
+    }
+
+    @Override
+    public ResponseEntity<Account> updateAccount(String IBAN, @Valid AccountDto body) {
+        Account account = accountService.updateAccount(body, IBAN);
+        return ResponseEntity
+                .status(200)
+                .body(account);
+    }
+
+
+
+
+
 
 }

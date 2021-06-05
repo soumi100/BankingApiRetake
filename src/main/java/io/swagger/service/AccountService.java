@@ -5,6 +5,7 @@ import io.swagger.model.AccountDto;
 import io.swagger.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
@@ -22,6 +23,11 @@ public class AccountService {
         return (List<Account>) accountRepository.findAll();
     }
 
+    public Account getAccountByIban(String IBAN)  {
+        Account account = accountRepository.getAccountByIban(IBAN);
+        return  account;
+    }
+
     public Account addAccount(Account account) {
         Account NewAccount = new Account();
         NewAccount.setBalance(0);
@@ -33,21 +39,16 @@ public class AccountService {
         accountRepository.save(NewAccount);
         return account;
     }
-    public Account getAccountByIban(String IBAN)  {
-        Account account = accountRepository.getAccountByIban(IBAN);
-        return  account;
+
+    @DeleteMapping
+    public void deleteAccount(String IBAN)
+    {
+        Account accountToDelete = accountRepository.getAccountByIban(IBAN);
+       // accountToDelete.setDeleted(true);
+        accountRepository.save(accountToDelete);
     }
 
     @PutMapping
-    public Account deactivateAccount(String iban)
-    {
-        // soft delete
-        Account accountToDeactivate = accountRepository.getAccountByIban(iban);
-        accountToDeactivate.setActive(false);
-        accountRepository.save(accountToDeactivate);
-        return accountToDeactivate;
-    }
-    @PatchMapping
     public Account updateAccount(AccountDto newUpdatedAccount, String IBAN)
     {
         Account accountToUpdate = accountRepository.getAccountByIban(IBAN);
@@ -57,6 +58,7 @@ public class AccountService {
         accountRepository.save(accountToUpdate);
         return accountToUpdate;
     }
+
     public String GenerateRandomIban() {
         Random random = new Random();
         StringBuilder IBAN = new StringBuilder("NL");
