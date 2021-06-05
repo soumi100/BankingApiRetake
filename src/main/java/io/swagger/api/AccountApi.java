@@ -62,7 +62,7 @@ public interface AccountApi {
             @io.swagger.annotations.ApiResponse(code = 409, message = "already exists"),
             @io.swagger.annotations.ApiResponse(code = 404, message = "The specified resource was not found")
     })
-    @RequestMapping(value = "/accounts/new",
+    @RequestMapping(value = "/accounts",
             consumes = { "application/json" },
             method = RequestMethod.POST)
     ResponseEntity<Account> addAccount(@ApiParam(value = ""  )  @Valid @RequestBody Account account);
