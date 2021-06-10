@@ -42,7 +42,7 @@ public class LoginApiController implements LoginApi {
         this.request = request;
     }
 
-    public ResponseEntity<InlineResponse200> login(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody Body1 body) {
+    public ResponseEntity<InlineResponse200> login(@Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody Body1 body) {
         String accept = request.getHeader("Accept");
         InlineResponse200 response200 = new InlineResponse200();
             String username = body.getUsername();

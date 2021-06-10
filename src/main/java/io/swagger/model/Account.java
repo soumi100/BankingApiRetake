@@ -5,20 +5,49 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
+
+import javax.persistence.*;
 import javax.validation.constraints.*;
 
 /**
  * Account
  */
+@Entity
+@Data
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T11:15:57.209Z[GMT]")
-
-
 public class Account   {
+  @Id
+  @SequenceGenerator(name = "account_seq", initialValue = 1)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_seq")
+  @JsonProperty("id")
+  private Long id = null;
   @JsonProperty("userId")
   private Long userId = null;
+
+  public boolean isDeleted() {
+    return isDeleted;
+  }
+
+  public void setDeleted(boolean deleted) {
+    isDeleted = deleted;
+  }
+
+  private boolean isDeleted ;
+  public Account(Long userId, TypeEnum type, CurrencyEnum currency, Boolean active, String iban, Integer balance) {
+    this.userId = userId;
+    this.type = type;
+    this.currency = currency;
+    this.active = active;
+    this.iban = iban;
+    this.balance = balance;
+    this.isDeleted = false;
+  }
+
+  public Account() {
+  }
 
   /**
    * Gets or Sets type
@@ -247,6 +276,7 @@ public class Account   {
     sb.append("    active: ").append(toIndentedString(active)).append("\n");
     sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
     sb.append("    balance: ").append(toIndentedString(balance)).append("\n");
+    sb.append("    isDeleted: ").append(toIndentedString(isDeleted)).append("\n");
     sb.append("}");
     return sb.toString();
   }
