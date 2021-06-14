@@ -5,7 +5,6 @@ import io.swagger.repository.UserRepository;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,9 +15,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
+
 @Getter
 @Setter
 
@@ -40,22 +39,20 @@ public class UserService implements UserDetailsService {
 
     }
 
-    public List<User> getAllUser(){
+    public List<User> getAllUser() {
         return (List<User>) userRepository.findAll();
     }
 
-    public List<User> getUserQuery(Long id, String lastname, int limit){
+    public List<User> getUserQuery(Long id, String lastname, int limit) {
         List<User> users = new ArrayList<>();
-        if (id != null){
+        if (id != null) {
             users.add(this.getById(id));
-        }
-        else if (lastname != null){
+        } else if (lastname != null) {
             this.getByLastName(lastname);
-        }
-        else if(limit != 0){
+        } else if (limit != 0) {
             users = (List<User>) userRepository.findAll();
             List<User> newusers = new ArrayList<>();
-            for (int i = 0; i < limit; i++){
+            for (int i = 0; i < limit; i++) {
                 newusers.add(users.get(i));
             }
             return newusers;
@@ -63,7 +60,7 @@ public class UserService implements UserDetailsService {
         return users;
     }
 
-    public String getLogin(String username, String password){
+    public String getLogin(String username, String password) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
             return jwtUtil.generateToken(username, userRepository.findByUsername(username).getType());
@@ -73,15 +70,17 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public User getById(Long id){
+    public User getById(Long id) {
         return userRepository.findById(id).orElse(null);
     }
 
-    public User getByLastName(String lastname){
+    public User getByLastName(String lastname) {
         return userRepository.findByLastName(lastname);
     }
 
-    public User getByUserName(String username){return userRepository.findByUsername(username);}
+    public User getByUserName(String username) {
+        return userRepository.findByUsername(username);
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

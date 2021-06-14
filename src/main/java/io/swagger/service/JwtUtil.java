@@ -13,16 +13,12 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 public class JwtUtil implements Serializable {
-    private static final long serialVersionUID = -2550185165626007488L;
-
     public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
-
+    private static final long serialVersionUID = -2550185165626007488L;
     @Value("${jwt.secret}")
     private String secret;
 
@@ -40,6 +36,7 @@ public class JwtUtil implements Serializable {
         final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
     }
+
     //for retrieveing any information from token we will need the secret key
     private Claims getAllClaimsFromToken(String token) {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
@@ -54,9 +51,9 @@ public class JwtUtil implements Serializable {
     //generate token for user
     public String generateToken(String username, User.TypeEnum role) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("auth",  new SimpleGrantedAuthority(role.getAuthority()));
+        claims.put("auth", new SimpleGrantedAuthority(role.getAuthority()));
 
-        return doGenerateToken(claims,username);
+        return doGenerateToken(claims, username);
     }
 
     //while creating the token -

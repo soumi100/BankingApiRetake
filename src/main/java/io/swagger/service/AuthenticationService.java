@@ -10,7 +10,8 @@ public class AuthenticationService {
 
     @Autowired
     UserService userService;
-    public boolean isEmployee(){
+
+    public boolean isEmployee() {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.getByUserName(name);
         return user.getType() == User.TypeEnum.EMPLOYEE;

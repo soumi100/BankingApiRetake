@@ -19,14 +19,11 @@ import java.util.List;
 @RestController
 public class AccountApiController implements AccountApi {
 
+    private static final Logger log = LoggerFactory.getLogger(AccountApiController.class);
+    private final ObjectMapper objectMapper;
+    private final HttpServletRequest request;
     @Autowired
     private AccountService accountService;
-
-    private static final Logger log = LoggerFactory.getLogger(AccountApiController.class);
-
-    private final ObjectMapper objectMapper;
-
-    private final HttpServletRequest request;
 
     @org.springframework.beans.factory.annotation.Autowired
     public AccountApiController(ObjectMapper objectMapper, HttpServletRequest request) {
@@ -37,9 +34,9 @@ public class AccountApiController implements AccountApi {
     @Override
     public ResponseEntity<List<Account>> getAccounts(@Valid Integer limit) {
         List<Account> accounts = accountService.getAccounts();
-        return new ResponseEntity<List<Account>>(accounts.subList(0,limit),HttpStatus.OK)
+        return new ResponseEntity<List<Account>>(accounts.subList(0, limit), HttpStatus.OK)
                 .status(200)
-                .body(accounts.subList(0,limit));
+                .body(accounts.subList(0, limit));
     }
 
 
@@ -52,8 +49,8 @@ public class AccountApiController implements AccountApi {
     }
 
     @Override
-    public ResponseEntity<Account> addAccount(@Valid Account account) {
-        Account NewAccount =  accountService.addAccount(account);
+    public ResponseEntity<Account> addAccount(@Valid Account account) throws IllegalAccessException {
+        Account NewAccount = (Account) accountService.addAccount(account);
         return ResponseEntity
                 .status(201)
                 .body(NewAccount);
@@ -72,10 +69,6 @@ public class AccountApiController implements AccountApi {
                 .status(200)
                 .body(account);
     }
-
-
-
-
 
 
 }
