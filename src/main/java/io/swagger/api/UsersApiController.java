@@ -2,6 +2,7 @@ package io.swagger.api;
 
 import io.swagger.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.service.AuthenticationService;
 import io.swagger.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -17,6 +18,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -49,6 +53,9 @@ public class UsersApiController implements UsersApi {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    AuthenticationService authenticationService;
+
     @org.springframework.beans.factory.annotation.Autowired
     public UsersApiController(ObjectMapper objectMapper, HttpServletRequest request) {
         this.objectMapper = objectMapper;
@@ -57,19 +64,21 @@ public class UsersApiController implements UsersApi {
 
     public ResponseEntity<Void> createUser(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody User body) {
         String accept = request.getHeader("Accept");
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<List<User>> getUsers(@Parameter(in = ParameterIn.QUERY, description = "Get user that corresponds to userID"
-            ,schema=@Schema()) @Valid @RequestParam(value = "userid", required = false) Integer userid,
-                                               @Parameter(in = ParameterIn.QUERY, description = "Get user that has account with IBAN" ,
-                                                       schema=@Schema()) @Valid @RequestParam(value = "iban", required = false) Integer iban,
+            ,schema=@Schema()) @Valid @RequestParam(value = "userid", required = false) Long userid,
                                                @Parameter(in = ParameterIn.QUERY, description = "Get users based on Last Name" ,
                                                        schema=@Schema()) @Valid @RequestParam(value = "lastname", required = false) String lastname,
                                                @Parameter(in = ParameterIn.QUERY, description = "Maximum numbers of items to return" ,
                                                        schema=@Schema()) @Valid @RequestParam(value = "limit", required = false) Integer limit)
     {
-        return new ResponseEntity<List<User>>(userService.getAllUser(), HttpStatus.OK);
+        if (authenticationService.isEmployee() == true){
+            return new ResponseEntity<List<User>>(userService.getAllUser(), HttpStatus.OK);
+        }
+        return new ResponseEntity<List<User>>(HttpStatus.FORBIDDEN);
     }
 
 }

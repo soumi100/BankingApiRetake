@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.swagger.model.User;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,9 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class JwtUtil implements Serializable {
@@ -49,9 +52,11 @@ public class JwtUtil implements Serializable {
     }
 
     //generate token for user
-    public String generateToken(User userDetails) {
+    public String generateToken(String username, User.TypeEnum role) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, userDetails.getUsername());
+        claims.put("auth",  new SimpleGrantedAuthority(role.getAuthority()));
+
+        return doGenerateToken(claims,username);
     }
 
     //while creating the token -

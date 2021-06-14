@@ -1,14 +1,22 @@
 package io.swagger.service;
 
 import io.swagger.model.User;
+import io.swagger.repository.UserRepository;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.threeten.bp.LocalDate;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 @Getter
@@ -16,50 +24,74 @@ import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    JwtUtil jwtUtil;
+
+    @Autowired
+    AuthenticationManager authenticationManager;
+
+
     List<User> users;
 
     public UserService() {
-        users = new ArrayList<>();
-        User user =new User();
-        user.setId(1L);
-        user.setActive(true);
-        user.setUsername("prinsalvino");
-        user.setPassword("test123");
-        user.setFirstName("Prins");
-        user.lastName("Alvino");
-        user.setEmail("prinsalvino@gmail.com");
-        user.setBirthdate(LocalDate.now());
 
-        user.setAddress("Kets");
-        user.setPostalcode("1156AX");
-        user.setCity("Marken");
-        user.setPhoneNumber("0855");
-        user.setType(User.TypeEnum.EMPLOYEE);
-        users.add(user);
     }
 
     public List<User> getAllUser(){
+        return (List<User>) userRepository.findAll();
+    }
+
+    public List<User> getUserQuery(Long id, String lastname, int limit){
+        List<User> users = new ArrayList<>();
+        if (id != null){
+            users.add(this.getById(id));
+        }
+        else if (lastname != null){
+            this.getByLastName(lastname);
+        }
+        else if(limit != 0){
+            users = (List<User>) userRepository.findAll();
+            List<User> newusers = new ArrayList<>();
+            for (int i = 0; i < limit; i++){
+                newusers.add(users.get(i));
+            }
+            return newusers;
+        }
         return users;
     }
 
-    public User getLogin(String username, String password){
-        for (User user:users) {
-            System.out.println(user.getUsername());
-            System.out.println(username);
-            if (user.getUsername().equals(username) && user.getPassword().equals(password)){
-                return user;
-            }
+    public String getLogin(String username, String password){
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            return jwtUtil.generateToken(username, userRepository.findByUsername(username).getType());
+        } catch (AuthenticationException e) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                    "Invalid username/password");
         }
-        return null;
     }
+
+    public User getById(Long id){
+        return userRepository.findById(id).orElse(null);
+    }
+
+    public User getByLastName(String lastname){
+        return userRepository.findByLastName(lastname);
+    }
+
+    public User getByUserName(String username){return userRepository.findByUsername(username);}
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        for (User user:users) {
-            if (user.getUsername().equals(username)){
-                return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(), new ArrayList<>());
-            }
+        final User user = userRepository.findByUsername(username);
+
+        if (user == null) {
+            throw new UsernameNotFoundException("User '" + username + "' not found");
         }
-        return null;
+        return org.springframework.security.core.userdetails.User
+                .withUsername(username).password(user.getPassword()).authorities(user.getType())
+                .accountExpired(false).accountLocked(false).credentialsExpired(false).disabled(false).build();
     }
 }

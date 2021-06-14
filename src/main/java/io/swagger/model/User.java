@@ -6,13 +6,17 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
 import org.threeten.bp.LocalDate;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+
+import static javax.persistence.GenerationType.SEQUENCE;
 
 /**
  * User
@@ -25,6 +29,7 @@ import javax.validation.constraints.*;
 
 public class User   {
   @Id
+  @GeneratedValue(strategy=SEQUENCE)
   @JsonProperty("id")
   private Long id = null;
 
@@ -61,10 +66,10 @@ public class User   {
   /**
    * Gets or Sets type
    */
-  public enum TypeEnum {
-    CUSTOMER("Customer"),
+  public enum TypeEnum implements GrantedAuthority {
+    CUSTOMER("ROLE_CUSTOMER"),
     
-    EMPLOYEE("Employee");
+    EMPLOYEE("ROLE_EMPLOYEE");
 
     private String value;
 
@@ -86,6 +91,11 @@ public class User   {
         }
       }
       return null;
+    }
+
+    @Override
+    public String getAuthority() {
+      return name();
     }
   }
   @JsonProperty("type")

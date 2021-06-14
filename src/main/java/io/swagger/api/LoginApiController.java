@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -45,19 +46,12 @@ public class LoginApiController implements LoginApi {
     public ResponseEntity<InlineResponse200> login(@Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody Body1 body) {
         String accept = request.getHeader("Accept");
         InlineResponse200 response200 = new InlineResponse200();
-            String username = body.getUsername();
-            String password = body.getPassword();
-            User user = userService.getLogin(username,password);
-            if (user != null){
-                final String jwt = jwtUtill.generateToken(user);
-                response200.setToken(jwt);
-                response200.setId(user.getId().intValue());
-                return new ResponseEntity<InlineResponse200>(response200, HttpStatus.OK);
-            }
-            else{
-                return new ResponseEntity<InlineResponse200>(HttpStatus.UNAUTHORIZED);
-            }
-
+        String username = body.getUsername();
+        String password = body.getPassword();
+        String jwt = userService.getLogin(body.getUsername(), body.getPassword());
+        response200.setToken(jwt);
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+        return new ResponseEntity<InlineResponse200>(response200, HttpStatus.OK);
     }
 
 }
