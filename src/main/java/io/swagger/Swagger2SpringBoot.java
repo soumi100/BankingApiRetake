@@ -56,6 +56,22 @@ public class Swagger2SpringBoot implements CommandLineRunner {
         user.setType(User.TypeEnum.EMPLOYEE);
         userRepository.save(user);
 
+        user.setId(2L);
+        user.setActive(true);
+        user.setUsername("test");
+        user.setPassword(passwordEncoder.encode("ya123"));
+        user.setFirstName("test");
+        user.lastName("test");
+        user.setEmail("test@gmail.com");
+        user.setBirthdate(LocalDate.now());
+        user.setAddress("Kets");
+        user.setPostalcode("1156AX");
+        user.setCity("Marken");
+        user.setPhoneNumber("0855");
+        user.setType(User.TypeEnum.CUSTOMER);
+
+        userRepository.save(user);
+
         accounts.forEach(accountRepository::save);
         accountRepository.findAll().forEach(System.out::println);
         if (arg0.length > 0 && arg0[0].equals("exitcode")) {

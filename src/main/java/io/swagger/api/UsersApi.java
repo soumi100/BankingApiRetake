@@ -66,7 +66,7 @@ public interface UsersApi {
     @RequestMapping(value = "/users",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
-    ResponseEntity<List<User>> getUsers(@Parameter(in = ParameterIn.QUERY, description = "Get user that corresponds to userID" ,schema=@Schema()) @Valid @RequestParam(value = "userid", required = false) Long userid, @Parameter(in = ParameterIn.QUERY, description = "Get users based on Last Name" ,schema=@Schema()) @Valid @RequestParam(value = "lastname", required = false) String lastname, @Parameter(in = ParameterIn.QUERY, description = "Maximum numbers of items to return" ,schema=@Schema()) @Valid @RequestParam(value = "limit", required = false) Integer limit);
+    ResponseEntity<List<User>> getUsers(@Parameter(in = ParameterIn.QUERY, description = "Get users based on Last Name" ,schema=@Schema()) @Valid @RequestParam(value = "lastname", required = false) String lastname, @Parameter(in = ParameterIn.QUERY, description = "Maximum numbers of items to return" ,schema=@Schema()) @Valid @RequestParam(value = "limit", required = false) Integer limit);
 
 }
 

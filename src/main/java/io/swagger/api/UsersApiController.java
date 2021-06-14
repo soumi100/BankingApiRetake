@@ -38,6 +38,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T11:15:57.209Z[GMT]")
 @RestController
@@ -63,20 +64,42 @@ public class UsersApiController implements UsersApi {
     }
 
     public ResponseEntity<Void> createUser(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody User body) {
-        String accept = request.getHeader("Accept");
-        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        System.out.println(authenticationService.isEmployee());
+        if (authenticationService.isEmployee() == true) {
+
+            if(body.getType() == null){
+                body.setType(User.TypeEnum.CUSTOMER);
+            }
+            System.out.println(body.getBirthdate());
+            userService.createUser(body);
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<Void>(HttpStatus.FORBIDDEN);
+        }
     }
 
-    public ResponseEntity<List<User>> getUsers(@Parameter(in = ParameterIn.QUERY, description = "Get user that corresponds to userID"
-            ,schema=@Schema()) @Valid @RequestParam(value = "userid", required = false) Long userid,
-                                               @Parameter(in = ParameterIn.QUERY, description = "Get users based on Last Name" ,
+    public ResponseEntity<List<User>> getUsers(@Parameter(in = ParameterIn.QUERY, description = "Get users based on Last Name" ,
                                                        schema=@Schema()) @Valid @RequestParam(value = "lastname", required = false) String lastname,
                                                @Parameter(in = ParameterIn.QUERY, description = "Maximum numbers of items to return" ,
                                                        schema=@Schema()) @Valid @RequestParam(value = "limit", required = false) Integer limit)
     {
         if (authenticationService.isEmployee() == true){
-            return new ResponseEntity<List<User>>(userService.getAllUser(), HttpStatus.OK);
+            if(limit != null && lastname == null){
+                return new ResponseEntity<List<User>>(userService.getAllUserWithLimit(limit), HttpStatus.OK);
+            }
+            else if(limit == null && lastname != null){
+                return new ResponseEntity<List<User>>((List<User>) userService.getByLastName(lastname), HttpStatus.OK);
+            }
+            else if(limit != null && lastname != null){
+                System.out.println(lastname);
+                System.out.println(limit);
+                return new ResponseEntity<List<User>>((List<User>) userService.getByLastNameWithLimit(lastname, limit), HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<List<User>>(userService.getAllUser(), HttpStatus.OK);
+            }
+
         }
         return new ResponseEntity<List<User>>(HttpStatus.FORBIDDEN);
     }

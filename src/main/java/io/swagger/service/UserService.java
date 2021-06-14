@@ -43,24 +43,12 @@ public class UserService implements UserDetailsService {
     public List<User> getAllUser(){
         return (List<User>) userRepository.findAll();
     }
+    public List<User> getAllUserWithLimit(int limit){
+        return userRepository.getUsersWithLimit(limit);
+    }
 
-    public List<User> getUserQuery(Long id, String lastname, int limit){
-        List<User> users = new ArrayList<>();
-        if (id != null){
-            users.add(this.getById(id));
-        }
-        else if (lastname != null){
-            this.getByLastName(lastname);
-        }
-        else if(limit != 0){
-            users = (List<User>) userRepository.findAll();
-            List<User> newusers = new ArrayList<>();
-            for (int i = 0; i < limit; i++){
-                newusers.add(users.get(i));
-            }
-            return newusers;
-        }
-        return users;
+    public void createUser(User user){
+        userRepository.save(user);
     }
 
     public String getLogin(String username, String password){
@@ -77,8 +65,16 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(id).orElse(null);
     }
 
-    public User getByLastName(String lastname){
-        return userRepository.findByLastName(lastname);
+    public List<User> getByLastName(String lastname){
+        List<User> users = new ArrayList<>();
+        users.add(userRepository.findByLastName(lastname));
+        return users;
+    }
+
+    public List<User> getByLastNameWithLimit(String lastname, int limit){
+        List<User> users = new ArrayList<>();
+        users.add(userRepository.findByLastNameWithLimit(lastname, limit));
+        return users;
     }
 
     public User getByUserName(String username){return userRepository.findByUsername(username);}
