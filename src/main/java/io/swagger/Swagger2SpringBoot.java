@@ -10,7 +10,6 @@ import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.threeten.bp.LocalDate;
 import springfox.documentation.oas.annotations.EnableOpenApi;
@@ -20,41 +19,38 @@ import java.util.List;
 
 @SpringBootApplication
 @EnableOpenApi
-@ComponentScan(basePackages = { "io.swagger", "io.swagger.api" ,"io.swagger.repository"  ,"io.swagger.configuration"})
+@ComponentScan(basePackages = {"io.swagger", "io.swagger.api", "io.swagger.repository", "io.swagger.configuration"})
 public class Swagger2SpringBoot implements CommandLineRunner {
+    @Autowired
+    PasswordEncoder passwordEncoder;
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    PasswordEncoder passwordEncoder;
+
+    public static void main(String[] args) throws Exception {
+        new SpringApplication(Swagger2SpringBoot.class).run(args);
+    }
 
     @Override
     public void run(String... arg0) throws Exception {
         List<Account> accounts = new ArrayList<>();
-        Account account1 = new Account(500l,Account.TypeEnum.CURRENT,Account.CurrencyEnum.EUR,true,"NL01INHO00000000010",9989);
-        Account account2 = new Account(400l,Account.TypeEnum.SAVINGS,Account.CurrencyEnum.EUR,true,"NL01INHO00000000080",500);
-        Account  account3= new Account(300l,Account.TypeEnum.CURRENT,Account.CurrencyEnum.EUR,true,"NL01INHO00000000090",8887);
+        List<User> users = new ArrayList<>();
+
+        Account account1 = new Account(500l, Account.TypeEnum.CURRENT, Account.CurrencyEnum.EUR, true, "NL01INHO00000000010", 9989);
+        Account account2 = new Account(400l, Account.TypeEnum.SAVINGS, Account.CurrencyEnum.EUR, true, "NL01INHO00000000080", 500);
+        Account account3 = new Account(300l, Account.TypeEnum.CURRENT, Account.CurrencyEnum.EUR, true, "NL01INHO00000000090", 8887);
 
         accounts.add(account1);
         accounts.add(account2);
         accounts.add(account3);
 
-        User user =new User();
-        user.setId(1L);
-        user.setActive(true);
-        user.setUsername("prinsalvino");
-        user.setPassword(passwordEncoder.encode("test123"));
-        user.setFirstName("Prins");
-        user.lastName("Alvino");
-        user.setEmail("prinsalvino@gmail.com");
-        user.setBirthdate(LocalDate.now());
-        user.setAddress("Kets");
-        user.setPostalcode("1156AX");
-        user.setCity("Marken");
-        user.setPhoneNumber("0855");
-        user.setType(User.TypeEnum.EMPLOYEE);
-        userRepository.save(user);
+        User soumia = new User(1L,"SB",passwordEncoder.encode("pass123"),"soumia","bouhouri","sou@gmx.com",LocalDate.of(1993,8,02),"Rijswijk","2282JV","Rijswijk","062535199", User.TypeEnum.CUSTOMER,true);
+        User prins = new User(2L,"prinsalvino",passwordEncoder.encode("test123"),"prins","alvino","prinsalvino@gmx.com",LocalDate.of(1993,8,02),"Rijswijk","1156AX","Amsterdam","062535199", User.TypeEnum.EMPLOYEE,true);
+
+        users.add(soumia);
+        users.add(prins);
+
 
         user.setId(2L);
         user.setActive(true);
@@ -73,14 +69,14 @@ public class Swagger2SpringBoot implements CommandLineRunner {
         userRepository.save(user);
 
         accounts.forEach(accountRepository::save);
+        users.forEach(userRepository::save);
+
         accountRepository.findAll().forEach(System.out::println);
+        userRepository.findAll().forEach(System.out::println);
+
         if (arg0.length > 0 && arg0[0].equals("exitcode")) {
             throw new ExitException();
         }
-    }
-
-    public static void main(String[] args) throws Exception {
-        new SpringApplication(Swagger2SpringBoot.class).run(args);
     }
 
     class ExitException extends RuntimeException implements ExitCodeGenerator {
