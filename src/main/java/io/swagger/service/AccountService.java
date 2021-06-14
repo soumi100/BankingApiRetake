@@ -32,7 +32,7 @@ public class AccountService {
     }
 
     public Account addAccount(Account account) throws IllegalAccessException {
-        if (!authenticationService.isEmployee()) {
+        if (authenticationService.isEmployee()) {
             Account NewAccount = new Account();
             NewAccount.setBalance(0);
             NewAccount.setActive(true);
@@ -54,7 +54,11 @@ public class AccountService {
             Account accountToDelete = accountRepository.getAccountByIban(iban);
             accountToDelete.setDeleted(true);
             accountRepository.save(accountToDelete);
-        } else {
+        }else if(!authenticationService.isEmployee() ) // && )
+            {
+                // allow the account holder to delete his account only
+            }
+        else {
             // throw exception
         }
     }
