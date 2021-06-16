@@ -32,6 +32,15 @@ public class Body2   {
   @JsonProperty("userPerformingId")
   private Long userPerformingId = null;
 
+  public Body2(String accountFrom, String accountTo, Double amount, String description, Long userPerformingId, TransactionTypeEnum transactionType) {
+    this.accountFrom = accountFrom;
+    this.accountTo = accountTo;
+    this.amount = amount;
+    this.description = description;
+    this.userPerformingId = userPerformingId;
+    this.transactionType = transactionType;
+  }
+
   /**
    * Gets or Sets transactionType
    */

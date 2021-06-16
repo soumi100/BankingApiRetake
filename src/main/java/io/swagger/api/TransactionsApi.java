@@ -5,69 +5,102 @@
  */
 package io.swagger.api;
 
-import io.swagger.model.Body2;
+import io.swagger.model.Account;
 import io.swagger.model.Transaction;
+import io.swagger.model.TransactionDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.*;
 import java.util.List;
-import java.util.Map;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T11:15:57.209Z[GMT]")
 @Validated
 public interface TransactionsApi {
 
-    @Operation(summary = "create a new transaction", description = "Calling this allows you to create a transaction", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "Transactions" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "created transaction"),
-        
-        @ApiResponse(responseCode = "400", description = "bad request", content = @Content(schema = @Schema(implementation = String.class))),
-        
-        @ApiResponse(responseCode = "401", description = "Access token is missing or invalid"),
-        
-        @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = @Content(schema = @Schema(implementation = String.class))) })
-    @RequestMapping(value = "/Transactions",
-        produces = { "application/json" }, 
-        consumes = { "application/json" }, 
-        method = RequestMethod.POST)
-    ResponseEntity<Void> createTransaction(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody Body2 body);
+    @Operation(summary = "", description = "", security = {
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Transaction" })
+    @io.swagger.annotations.ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 200, message = "list of returned transactions"),
+            @io.swagger.annotations.ApiResponse(code = 400, message = "bad request"),
+            @io.swagger.annotations.ApiResponse(code = 401, message = "Unauthorized"),
+            @io.swagger.annotations.ApiResponse(code = 404, message = "The specified resource was not found")
+    })
+    @RequestMapping(value = "/transactions",
+            produces = { "application/json" },
+            method = RequestMethod.GET)
+    ResponseEntity<List<Transaction>> getTransactions( @Parameter(in = ParameterIn.QUERY, description = "The maximum numbers of items to return, exl" ,schema=@Schema()) @Valid @RequestParam(value = "limit", required = false) Integer limit);
+
+    @Operation(summary = "get the account with the specific IBAN", description = "", tags={ "Accounts" })
+    @io.swagger.annotations.ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 200, message = "entity corresponding to the requested resource"),
+            @io.swagger.annotations.ApiResponse(code = 400, message = "bad request"),
+            @io.swagger.annotations.ApiResponse(code = 409, message = "already exists"),
+            @io.swagger.annotations.ApiResponse(code = 401, message = "Unauthorized"),
+            @io.swagger.annotations.ApiResponse(code = 404, message = "The requested resource could not be found")
+    })
+    @RequestMapping(value = "/transactions/{iban}",
+            produces = { "application/json" },
+            method = RequestMethod.GET)
+    ResponseEntity<List<Transaction>> getTransactionByIban(@Parameter(in = ParameterIn.PATH, description = "IBAN of the account to return",
+            required=true, schema=@Schema()) @PathVariable("iban") String IBAN) throws NotFoundException;
 
 
-    @Operation(summary = "Retrieve transactions that correspond to filter", description = "Calling this allows you to retrieve the transactions that match the filter", security = {
-        @SecurityRequirement(name = "bearerAuth")    }, tags={ "Transactions" })
-    @ApiResponses(value = { 
-        @ApiResponse(responseCode = "200", description = "Retrieve transactions", content = @Content(array = @ArraySchema(schema = @Schema(implementation = Transaction.class)))),
-        
-        @ApiResponse(responseCode = "400", description = "bad request", content = @Content(schema = @Schema(implementation = String.class))),
-        
-        @ApiResponse(responseCode = "401", description = "Access token is missing or invalid"),
-        
-        @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = @Content(schema = @Schema(implementation = String.class))) })
-    @RequestMapping(value = "/Transactions",
-        produces = { "application/json" }, 
-        method = RequestMethod.GET)
+
+    //post
+    @Operation(summary = "", description = "", security = {
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Transaction" })
+    @io.swagger.annotations.ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 200, message = "list of returned transactions"),
+            @io.swagger.annotations.ApiResponse(code = 400, message = "bad request"),
+            @io.swagger.annotations.ApiResponse(code = 401, message = "Unauthorized"),
+            @io.swagger.annotations.ApiResponse(code = 404, message = "The specified resource was not found")
+    })
+    @RequestMapping(value = "/transactions",
+            produces = { "application/json" },
+            consumes = { "application/json" },
+            method = RequestMethod.POST)
+    void createTransaction(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody TransactionDto body);
+
+
+
+   /*
+
+
+    // ********************************************************
+    @Operation(summary = "", description = "", security = {
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Transaction" })
+    @io.swagger.annotations.ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 200, message = "list of returned transactions"),
+            @io.swagger.annotations.ApiResponse(code = 400, message = "bad request"),
+            @io.swagger.annotations.ApiResponse(code = 401, message = "Unauthorized"),
+            @io.swagger.annotations.ApiResponse(code = 404, message = "The specified resource was not found")
+    })
+    @RequestMapping(value = "/transactions",
+            produces = { "application/json" },
+            method = RequestMethod.GET)
     ResponseEntity<List<Transaction>> getTransactions(@Parameter(in = ParameterIn.QUERY, description = "Get transaction that corresponds to IBAN" ,schema=@Schema()) @Valid @RequestParam(value = "iban", required = false) String iban, @Parameter(in = ParameterIn.QUERY, description = "transactions to date" ,schema=@Schema()) @Valid @RequestParam(value = "dateTo", required = false) String dateTo, @Parameter(in = ParameterIn.QUERY, description = "transactions from date" ,schema=@Schema()) @Valid @RequestParam(value = "dateFrom", required = false) String dateFrom, @Parameter(in = ParameterIn.QUERY, description = "The numbers of items to return" ,schema=@Schema()) @Valid @RequestParam(value = "limit", required = false) Integer limit);
 
+
+    @Operation(summary = "", description = "", security = {
+            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Transaction" })
+    @io.swagger.annotations.ApiResponses(value = {
+            @io.swagger.annotations.ApiResponse(code = 200, message = "list of returned transactions"),
+            @io.swagger.annotations.ApiResponse(code = 400, message = "bad request"),
+            @io.swagger.annotations.ApiResponse(code = 401, message = "Unauthorized"),
+            @io.swagger.annotations.ApiResponse(code = 404, message = "The specified resource was not found")
+    })
+    @RequestMapping(value = "/transactions",
+            produces = { "application/json" },
+            method = RequestMethod.GET)
+    ResponseEntity<List<Transaction>> getTransactionsByUserId(@Parameter(in = ParameterIn.QUERY, description = "Get transaction that corresponds to IBAN" ,schema=@Schema()) @Valid @RequestParam(value = "iban", required = false) String iban, @Parameter(in = ParameterIn.QUERY, description = "transactions to date" ,schema=@Schema()) @Valid @RequestParam(value = "dateTo", required = false) String dateTo, @Parameter(in = ParameterIn.QUERY, description = "transactions from date" ,schema=@Schema()) @Valid @RequestParam(value = "dateFrom", required = false) String dateFrom, @Parameter(in = ParameterIn.QUERY, description = "The numbers of items to return" ,schema=@Schema()) @Valid @RequestParam(value = "limit", required = false) Integer limit);
+
+    */
 }
 

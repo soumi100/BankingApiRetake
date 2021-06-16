@@ -5,8 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.threeten.bp.OffsetDateTime;
 import org.springframework.validation.annotation.Validated;
+
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
@@ -16,8 +21,14 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T11:15:57.209Z[GMT]")
 
+@Entity
+@Data
 
 public class Transaction   {
+  @Id
+  @SequenceGenerator(name = "trans_seq", initialValue = 1)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "trans_seq")
+
   @JsonProperty("id")
   private Long id = null;
 
@@ -38,6 +49,39 @@ public class Transaction   {
 
   @JsonProperty("userPerformingId")
   private Long userPerformingId = null;
+
+  public Transaction(Long id, OffsetDateTime timestamp, String accountFrom, String accountTo, Double amount, String description, Long userPerformingId, TransactionTypeEnum transactionType) {
+    this.id = id;
+    this.timestamp = timestamp;
+    this.accountFrom = accountFrom;
+    this.accountTo = accountTo;
+    this.amount = amount;
+    this.description = description;
+    this.userPerformingId = userPerformingId;
+    this.transactionType = transactionType;
+  }
+
+  public Transaction(OffsetDateTime timestamp, String accountFrom, String accountTo, Double amount, String description, Long userPerformingId, TransactionTypeEnum transactionType) {
+    this.timestamp = timestamp;
+    this.accountFrom = accountFrom;
+    this.accountTo = accountTo;
+    this.amount = amount;
+    this.description = description;
+    this.userPerformingId = userPerformingId;
+    this.transactionType = transactionType;
+  }
+
+  public Transaction() {
+  }
+  public Transaction(String accountFrom, String accountTo, Double amount, String description, Long userPerformingId, TransactionTypeEnum transactionType) {
+    setTimestamp(OffsetDateTime.now());
+    setAccountFrom(accountFrom);
+    setAccountTo(accountTo);
+    setAmount(amount);
+    setDescription(description);
+    setUserPerformingId(userPerformingId);
+    setTransactionType(transactionType);
+  }
 
   /**
    * Gets or Sets transactionType
