@@ -52,22 +52,6 @@ public class Swagger2SpringBoot implements CommandLineRunner {
         users.add(prins);
 
 
-        user.setId(2L);
-        user.setActive(true);
-        user.setUsername("test");
-        user.setPassword(passwordEncoder.encode("ya123"));
-        user.setFirstName("test");
-        user.lastName("test");
-        user.setEmail("test@gmail.com");
-        user.setBirthdate(LocalDate.now());
-        user.setAddress("Kets");
-        user.setPostalcode("1156AX");
-        user.setCity("Marken");
-        user.setPhoneNumber("0855");
-        user.setType(User.TypeEnum.CUSTOMER);
-
-        userRepository.save(user);
-
         accounts.forEach(accountRepository::save);
         users.forEach(userRepository::save);
 

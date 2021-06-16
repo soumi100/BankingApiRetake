@@ -1,7 +1,7 @@
 package io.swagger.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.model.Body1;
+import io.swagger.model.UserDTO;
 import io.swagger.model.InlineResponse200;
 import io.swagger.service.JwtUtil;
 import io.swagger.service.UserService;
@@ -42,11 +42,8 @@ public class LoginApiController implements LoginApi {
         this.request = request;
     }
 
-    public ResponseEntity<InlineResponse200> login(@Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody Body1 body) {
-        String accept = request.getHeader("Accept");
+    public ResponseEntity<InlineResponse200> login(@Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody UserDTO body) {
         InlineResponse200 response200 = new InlineResponse200();
-        String username = body.getUsername();
-        String password = body.getPassword();
         String jwt = userService.getLogin(body.getUsername(), body.getPassword());
         response200.setToken(jwt);
         System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities());

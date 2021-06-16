@@ -13,14 +13,14 @@ import java.util.Objects;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T11:15:57.209Z[GMT]")
 
 
-public class Body1 {
+public class UserDTO {
     @JsonProperty("username")
     private String username = null;
 
     @JsonProperty("password")
     private String password = null;
 
-    public Body1 username(String username) {
+    public UserDTO username(String username) {
         this.username = username;
         return this;
     }
@@ -40,7 +40,7 @@ public class Body1 {
         this.username = username;
     }
 
-    public Body1 password(String password) {
+    public UserDTO password(String password) {
         this.password = password;
         return this;
     }
@@ -69,9 +69,9 @@ public class Body1 {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Body1 body1 = (Body1) o;
-        return Objects.equals(this.username, body1.username) &&
-                Objects.equals(this.password, body1.password);
+        UserDTO userDTO = (UserDTO) o;
+        return Objects.equals(this.username, userDTO.username) &&
+                Objects.equals(this.password, userDTO.password);
     }
 
     @Override

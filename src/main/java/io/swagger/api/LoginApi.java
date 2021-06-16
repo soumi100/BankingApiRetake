@@ -5,7 +5,7 @@
  */
 package io.swagger.api;
 
-import io.swagger.model.Body1;
+import io.swagger.model.UserDTO;
 import io.swagger.model.InlineResponse200;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -39,7 +39,7 @@ public interface LoginApi {
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.POST)
-    ResponseEntity<InlineResponse200> login(@Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody Body1 body);
+    ResponseEntity<InlineResponse200> login(@Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody UserDTO body);
 
 }
 

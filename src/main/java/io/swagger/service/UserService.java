@@ -77,6 +77,10 @@ public class UserService implements UserDetailsService {
         return users;
     }
 
+    public void deleteUserByID(Long id){
+        userRepository.deleteById(id);
+    }
+
     public User getByUserName(String username){return userRepository.findByUsername(username);}
 
     @Override
