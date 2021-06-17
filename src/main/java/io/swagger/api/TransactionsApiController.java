@@ -78,12 +78,17 @@ public class TransactionsApiController implements TransactionsApi {
               NewTransaction.setTransactionType(Transaction.TransactionTypeEnum.TRANSFER);
 
               //timestamp config
+        /*
               long timestamp = Long.parseLong("1498329000000L");
               ZoneId zone = ZoneId.of("Europe/Brussels");
               Instant instant = Instant.ofEpochMilli(timestamp);
               OffsetDateTime dateTime = OffsetDateTime.ofInstant(instant, zone);
 
-              NewTransaction.setTimestamp(dateTime);
+        */
+              OffsetDateTime dtm =
+                OffsetDateTime.parse("2017-04-01T00:00:00+00:00");
+
+              NewTransaction.setTimestamp(dtm);
               transactionService.createTransaction(NewTransaction);
 
     }
