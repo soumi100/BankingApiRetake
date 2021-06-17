@@ -48,10 +48,12 @@ public class Swagger2SpringBoot implements CommandLineRunner {
         transactions.forEach(transactionRepository::save);
         transactionRepository.findAll().forEach(System.out::println);
 
-        //transactionRepository.getTransactionByIban("NL01INHO00000000010").forEach(System.out::println);
 
         accounts.forEach(accountRepository::save);
         accountRepository.findAll().forEach(System.out::println);
+
+        transactionRepository.findTransactionByAccountFrom("NL01INHO00000000010").forEach(System.out::println);
+
         if (arg0.length > 0 && arg0[0].equals("exitcode")) {
             throw new ExitException();
         }

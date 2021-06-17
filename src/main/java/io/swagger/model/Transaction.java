@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.threeten.bp.LocalDate;
 import org.threeten.bp.OffsetDateTime;
 import org.springframework.validation.annotation.Validated;
 
@@ -34,6 +35,7 @@ public class Transaction   {
 
   @JsonProperty("timestamp")
   private OffsetDateTime timestamp = null;
+
 
   @JsonProperty("accountFrom")
   private String accountFrom = null;
