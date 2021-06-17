@@ -1,6 +1,7 @@
 package io.swagger.service;
 
 import io.swagger.model.User;
+import io.swagger.model.UserDTO;
 import io.swagger.repository.UserRepository;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -33,6 +35,11 @@ public class UserService implements UserDetailsService {
     @Autowired
     AuthenticationManager authenticationManager;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired AuthenticationService authenticationService;
+
 
     List<User> users;
 
@@ -48,6 +55,7 @@ public class UserService implements UserDetailsService {
     }
 
     public void createUser(User user){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
@@ -71,14 +79,43 @@ public class UserService implements UserDetailsService {
         return users;
     }
 
-    public List<User> getByLastNameWithLimit(String lastname, int limit){
-        List<User> users = new ArrayList<>();
-        users.add(userRepository.findByLastNameWithLimit(lastname, limit));
-        return users;
-    }
-
     public void deleteUserByID(Long id){
         userRepository.deleteById(id);
+    }
+
+    public void updateUserById(Long id, User newUserData){
+        User target = userRepository.getUserById(id);
+        if (newUserData.getType() != null) {
+            target.setType(newUserData.getType());
+        }
+        if (newUserData.getBirthdate() != null) {
+            target.setBirthdate(newUserData.getBirthdate());
+        }
+        if (newUserData.getAddress() != null) {
+            target.setAddress(newUserData.getAddress());
+        }
+        if (newUserData.getUsername() != null) {
+            target.setUsername(newUserData.getUsername());
+        }
+        if (newUserData.getLastName() != null) {
+            target.setLastName(newUserData.getLastName());
+        }
+        if (newUserData.getEmail() != null) {
+            target.setEmail(newUserData.getEmail());
+        }
+        if (newUserData.getPostalcode() != null) {
+            target.setPostalcode(newUserData.getPostalcode());
+        }
+        if (newUserData.getCity() != null) {
+            target.setCity(newUserData.getCity());
+        }
+        if (newUserData.getPhoneNumber() != null) {
+            target.setPhoneNumber(newUserData.getPhoneNumber());
+        }
+        if (newUserData.getFirstName() != null) {
+            target.setFirstName(newUserData.getFirstName());
+        }
+        userRepository.save(target);
     }
 
     public User getByUserName(String username){return userRepository.findByUsername(username);}
@@ -93,5 +130,11 @@ public class UserService implements UserDetailsService {
         return org.springframework.security.core.userdetails.User
                 .withUsername(username).password(user.getPassword()).authorities(user.getType())
                 .accountExpired(false).accountLocked(false).credentialsExpired(false).disabled(false).build();
+    }
+
+    public void updateCurrentUserPassword(UserDTO newInfoUser){
+        User user = authenticationService.getCurrentUser();
+        user.setPassword(passwordEncoder.encode(newInfoUser.getPassword()));
+        userRepository.save(user);
     }
 }

@@ -16,13 +16,9 @@ public class AuthenticationService {
         User user = userService.getByUserName(name);
         return user.getType() == User.TypeEnum.EMPLOYEE;
     }
-//
-//    public User getCurrentUser(){
-//        Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        if (obj instanceof SecurityUserDetails){
-//            return ((SecurityUserDetails) obj).getUser();
-//        } else {
-//            return null;
-//        }
-//    }
+
+    public User getCurrentUser(){
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userService.getByUserName(name);
+    }
 }
