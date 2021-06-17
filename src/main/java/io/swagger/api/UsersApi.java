@@ -43,7 +43,7 @@ public interface UsersApi {
             produces = {"application/json"},
             consumes = {"application/json"},
             method = RequestMethod.POST)
-    ResponseEntity<Void> createUser(@Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody User body);
+    ResponseEntity<String> createUser(@Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody User body);
 
 
     @Operation(summary = "Retrieve users that correspond to filter", description = "Gets users that correspond to filter", security = {

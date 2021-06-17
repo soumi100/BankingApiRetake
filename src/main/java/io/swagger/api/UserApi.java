@@ -5,7 +5,9 @@
  */
 package io.swagger.api;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.model.User;
+import io.swagger.model.UserDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -68,5 +70,20 @@ public interface UserApi {
             method = RequestMethod.PUT)
     ResponseEntity<Void> updateUser(@Parameter(in = ParameterIn.PATH, description = "ID of article to retun", required = true, schema = @Schema()) @PathVariable("id") Long id, @Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody User body);
 
+    @Operation(summary = "Update current user password", description = "Update current user password", security = {
+            @SecurityRequirement(name = "bearerAuth")}, tags = {"Employee", "Customer"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User updated"),
+
+            @ApiResponse(responseCode = "400", description = "bad request", content = @Content(schema = @Schema(implementation = String.class))),
+
+            @ApiResponse(responseCode = "401", description = "Access token is missing or invalid"),
+
+            @ApiResponse(responseCode = "404", description = "The specified resource was not found", content = @Content(schema = @Schema(implementation = String.class)))})
+    @RequestMapping(value = "/user/changeMyPassword",
+            produces = {"application/json"},
+            consumes = {"application/json"},
+            method = RequestMethod.PUT)
+    ResponseEntity<Void> updateCurrentUserPassword(@Parameter(in = ParameterIn.DEFAULT, description = "", schema = @Schema()) @Valid @RequestBody UserDTO userDTO);
 }
 

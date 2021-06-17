@@ -1,6 +1,7 @@
 package io.swagger.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -36,7 +37,7 @@ public class User {
     @JsonProperty("username")
     private String username = null;
 
-    @JsonProperty("password")
+    @JsonProperty(value = "password",access = JsonProperty.Access.WRITE_ONLY)
     private String password = null;
 
     @JsonProperty("firstName")
@@ -153,7 +154,6 @@ public class User {
      * @return password
      **/
     @Schema(example = "Password123", required = true, description = "")
-    @NotNull
 
     public String getPassword() {
         return password;
@@ -236,7 +236,7 @@ public class User {
      *
      * @return birthdate
      **/
-    @Schema(example = "Sun Jul 16 00:00:00 GMT 13", required = true, description = "")
+    @Schema(example = "2000-12-30", required = true, description = "")
     @NotNull
 
     @Valid
