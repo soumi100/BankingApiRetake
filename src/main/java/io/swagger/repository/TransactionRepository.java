@@ -12,6 +12,14 @@ import java.util.List;
 @Repository
 public interface TransactionRepository extends CrudRepository<Transaction, Long> {
 
-    Transaction getTransactionByIban(String value);
+    @Query("select count(t.id) from Transaction t where (t.accountFrom = ?1)")
+    List<Transaction> getTransactionByIban(String accountFrom);
+
+    //List<Transaction> getByAccountFromOrAccountToOrderByTimestampDesc(String value1,String value2);
+
+    /*
+    @Query("select count(t.id) from Transaction t where (t.accountFrom = ?1 or (t.accountTo = ?1 and t.transactionType = 'DEPOSIT')) and t.timestamp >= ?2")
+    int getTransactionsToday(String iban, OffsetDateTime date);
+    */
 }
 

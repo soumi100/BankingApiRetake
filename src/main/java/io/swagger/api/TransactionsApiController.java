@@ -57,7 +57,7 @@ public class TransactionsApiController implements TransactionsApi {
 
     @Override
     public ResponseEntity<List<Transaction>> getTransactionByIban(String iban) throws NotFoundException {
-        List<Transaction> transactions = (List<Transaction>) getTransactionByIban(iban);
+        List<Transaction> transactions = (List<Transaction>) transactionService.getTransactionByIban(iban) ;
         return ResponseEntity
                 .status(200)
                 .body(transactions);
