@@ -11,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import org.threeten.bp.Instant;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.OffsetDateTime;
+import org.threeten.bp.ZoneId;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
@@ -73,8 +75,15 @@ public class TransactionsApiController implements TransactionsApi {
 
                 //*** addd it to dto
               NewTransaction.setUserPerformingId(5l);
-              NewTransaction.setTransactionType(Transaction.TransactionTypeEnum.DEPOSIT);
-              NewTransaction.setTimestamp(OffsetDateTime.parse("2021-03-24 16:34:26.666"));
+              NewTransaction.setTransactionType(Transaction.TransactionTypeEnum.TRANSFER);
+
+              //timestamp config
+              long timestamp = Long.parseLong("1498329000000L");
+              ZoneId zone = ZoneId.of("Europe/Brussels");
+              Instant instant = Instant.ofEpochMilli(timestamp);
+              OffsetDateTime dateTime = OffsetDateTime.ofInstant(instant, zone);
+
+              NewTransaction.setTimestamp(dateTime);
               transactionService.createTransaction(NewTransaction);
 
     }
