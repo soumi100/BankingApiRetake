@@ -34,9 +34,16 @@ public class AccountApiController implements AccountApi {
     @Override
     public ResponseEntity<List<Account>> getAccounts(@Valid Integer limit) {
         List<Account> accounts = accountService.getAccounts();
-        return new ResponseEntity<List<Account>>(accounts.subList(0, limit), HttpStatus.OK)
-                .status(200)
-                .body(accounts.subList(0, limit));
+        Integer defaultLimit = 3;
+      if (accounts.size()>limit){
+          return new ResponseEntity<List<Account>>(accounts.subList(0, limit), HttpStatus.OK)
+                  .status(200)
+                  .body(accounts.subList(0, limit));
+      }else{
+          return new ResponseEntity<List<Account>>(accounts.subList(0, defaultLimit), HttpStatus.OK)
+                  .status(200)
+                  .body(accounts.subList(0, defaultLimit));
+      }
     }
 
 
@@ -49,26 +56,25 @@ public class AccountApiController implements AccountApi {
     }
 
     @Override
-    public ResponseEntity<Account> addAccount(@Valid Account account) throws IllegalAccessException {
-        Account NewAccount = (Account) accountService.addAccount(account);
+    public ResponseEntity addAccount(@Valid Account account) throws IllegalAccessException {
+        ResponseEntity NewAccount = accountService.addAccount(account);
         return ResponseEntity
-                .status(201)
+                .status(HttpStatus.CREATED)
                 .body(NewAccount);
     }
 
 
     @Override
-    public void deleteAccount(String iban) {
+    public void deleteAccount(String iban) throws NotFoundException {
         accountService.deleteAccount(iban);
     }
 
     @Override
-    public ResponseEntity<Account> updateAccount(String IBAN, @Valid AccountDto body) {
-        Account account = accountService.updateAccount(body, IBAN);
+    public ResponseEntity updateAccount(String IBAN, @Valid AccountDto body) {
+        ResponseEntity account = accountService.updateAccount(body, IBAN);
         return ResponseEntity
-                .status(200)
+                .status(HttpStatus.OK)
                 .body(account);
     }
-
 
 }

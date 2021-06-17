@@ -31,46 +31,63 @@ public class AccountService {
         return account;
     }
 
-    public Account addAccount(Account account) throws IllegalAccessException {
+    public ResponseEntity addAccount(Account account) throws IllegalAccessException {
         if (authenticationService.isEmployee()) {
-            Account NewAccount = new Account();
-            NewAccount.setBalance(0);
-            NewAccount.setActive(true);
-            NewAccount.setCurrency(account.getCurrency());
-            NewAccount.setIban(GenerateRandomIban());
-            NewAccount.setType(account.getType());
-            NewAccount.setUserId(account.getUserId());
-            accountRepository.save(NewAccount);
-            return NewAccount;
+            if (getAccountByIban(account.getIban()) == null) {
+                Account NewAccount = new Account();
+                NewAccount.setBalance(0);
+                NewAccount.setActive(true);
+                NewAccount.setCurrency(account.getCurrency());
+                NewAccount.setIban(GenerateRandomIban());
+                NewAccount.setType(account.getType());
+                NewAccount.setUserId(account.getUserId());
+                accountRepository.save(NewAccount);
+                return new ResponseEntity(HttpStatus.OK);
+            } else {
+                return new ResponseEntity(HttpStatus.CONFLICT);
+            }
         } else {
-           // return new ResponseEntity(HttpStatus.FORBIDDEN);
-            throw new IllegalAccessException();
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
+
+
     }
 
     @DeleteMapping
-    public void deleteAccount(String iban) {
+    public ResponseEntity deleteAccount(String iban) {
         if (authenticationService.isEmployee()) {
             Account accountToDelete = accountRepository.getAccountByIban(iban);
-            accountToDelete.setDeleted(true);
-            accountRepository.save(accountToDelete);
-        }else if(!authenticationService.isEmployee() ) // && )
-            {
-                // allow the account holder to delete his account only
+            if (accountToDelete != null) {
+                accountToDelete.setDeleted(true);
+                accountRepository.save(accountToDelete);
+                accountRepository.deleteAccountByIban(iban);
+            } else {
+                return new ResponseEntity(HttpStatus.NO_CONTENT);
             }
-        else {
-            // throw exception
+
+        } else {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
+        return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
 
     @PutMapping
-    public Account updateAccount(AccountDto newUpdatedAccount, String iban) {
-        Account accountToUpdate = accountRepository.getAccountByIban(iban);
-        accountToUpdate.setActive(newUpdatedAccount.getActive());
-        accountToUpdate.setType(newUpdatedAccount.getType());
-        accountToUpdate.setCurrency(newUpdatedAccount.getCurrency());
-        accountRepository.save(accountToUpdate);
-        return accountToUpdate;
+    public ResponseEntity updateAccount(AccountDto newUpdatedAccount, String iban) {
+
+        if (authenticationService.isEmployee()) {
+            if (accountRepository.getAccountByIban(iban) != null) {
+                Account accountToUpdate = accountRepository.getAccountByIban(iban);
+                accountToUpdate.setActive(newUpdatedAccount.getActive());
+                accountToUpdate.setType(newUpdatedAccount.getType());
+                accountToUpdate.setCurrency(newUpdatedAccount.getCurrency());
+                accountRepository.save(accountToUpdate);
+            } else {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     public String GenerateRandomIban() {
