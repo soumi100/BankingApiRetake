@@ -72,10 +72,4 @@ public class AccountApiController implements AccountApi {
                 .status(200)
                 .body(account);
     }
-
-
-
-
-
-
 }
