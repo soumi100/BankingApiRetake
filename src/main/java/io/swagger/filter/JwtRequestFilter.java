@@ -1,5 +1,6 @@
 package io.swagger.filter;
 
+import io.swagger.model.User;
 import io.swagger.service.JwtUtil;
 import io.swagger.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
