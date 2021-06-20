@@ -39,7 +39,7 @@ public class Swagger2SpringBoot implements CommandLineRunner {
         accounts.add(account3);
 
         List<Transaction> transactions = new ArrayList<>();
-        Transaction transaction1 = new Transaction("NL01INHO00000000010","NL01INHO00000000080",252d,"tikke pay",2L, Transaction.TransactionTypeEnum.DEPOSIT);
+        Transaction transaction1 = new Transaction("NL01INHO00000000010","NL01INHO00000000080",252d,"tikke pay",1L, Transaction.TransactionTypeEnum.DEPOSIT);
         Transaction transaction2 = new Transaction("NL01INHO00000000080","NL01INHO00000000090",500d,"family support",2L, Transaction.TransactionTypeEnum.TRANSFER);
 
         transactions.add(transaction1);
@@ -53,6 +53,8 @@ public class Swagger2SpringBoot implements CommandLineRunner {
         accountRepository.findAll().forEach(System.out::println);
 
         transactionRepository.findTransactionByAccountFrom("NL01INHO00000000010").forEach(System.out::println);
+
+        transactionRepository.findTransactionByUserPerformingId(2L).forEach(System.out::println);
 
         if (arg0.length > 0 && arg0[0].equals("exitcode")) {
             throw new ExitException();

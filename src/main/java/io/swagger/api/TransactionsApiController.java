@@ -66,6 +66,16 @@ public class TransactionsApiController implements TransactionsApi {
     }
 
 
+    @Override
+    public ResponseEntity<List<Transaction>> getTransactionByUserPerformingId(String userPerformingId) throws NotFoundException {
+        List<Transaction> transactions =
+                (List<Transaction>) transactionService.getTransactionByUserPerformingId(Long.valueOf(userPerformingId)) ;
+        return ResponseEntity
+                .status(200)
+                .body(transactions);
+    }
+
+
     public void createTransaction(TransactionDto transactionDto) {
                 Transaction NewTransaction= new Transaction();
                 NewTransaction.setAccountFrom(transactionDto.getAccountFrom());

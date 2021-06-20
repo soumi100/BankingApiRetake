@@ -17,8 +17,8 @@ public interface TransactionRepository extends CrudRepository<Transaction, Long>
     @Query("SELECT t from Transaction t where t.accountFrom =:accountFrom")
     List<Transaction> findTransactionByAccountFrom(@Param("accountFrom") String accountFrom);
 
-    @Query("SELECT t from Transaction t where t.timestamp =:timestamp")
-    List<Transaction> findTransactionByDate(@Param("timestamp") String timestamp);
+    @Query("SELECT t from Transaction t where t.userPerformingId =:userPerformingId")
+    List<Transaction> findTransactionByUserPerformingId(@Param("userPerformingId") Long userPerformingId);
 }
 
 

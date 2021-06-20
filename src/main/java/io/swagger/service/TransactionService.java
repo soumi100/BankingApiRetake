@@ -28,6 +28,12 @@ public class TransactionService {
         return (List<Transaction>) transactionRepository.findTransactionByAccountFrom(IBAN);
     }
 
+    public List<Transaction> getTransactionByUserPerformingId(Long userPerformingId) //getting transactions from the user performing
+    {
+        //CONFIG USER ACCESS LATER
+        return (List<Transaction>) transactionRepository.findTransactionByUserPerformingId(userPerformingId);
+    }
+
     public void createTransaction(Transaction transaction){
         transactionRepository.save(transaction);
     }
