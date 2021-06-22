@@ -84,10 +84,10 @@ public class TransactionsApiController implements TransactionsApi {
                 NewTransaction.setDescription(transactionDto.getDescription());
 
                 //*** addd it to dto
-              NewTransaction.setUserPerformingId(5l);
+              //NewTransaction.setUserPerformingId(5l);
+              NewTransaction.setUserPerformingId(transactionDto.getUserPerformingId());
               NewTransaction.setTransactionType(Transaction.TransactionTypeEnum.TRANSFER);
 
-              //OffsetDateTime dtm = OffsetDateTime.parse("2017-04-01T00:00:00+00:00");
               OffsetDateTime dtm = OffsetDateTime.now();
               NewTransaction.setTimestamp(dtm);
               transactionService.createTransaction(NewTransaction);
