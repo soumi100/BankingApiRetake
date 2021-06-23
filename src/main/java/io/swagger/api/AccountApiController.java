@@ -36,10 +36,18 @@ public class AccountApiController implements AccountApi {
 
     @Override
     public ResponseEntity<List<Account>> getAccounts(@Valid Integer limit) {
+        Integer defaultLimit = 3;
         List<Account> accounts = accountService.getAccounts();
-        return new ResponseEntity<List<Account>>(accounts.subList(0,limit),HttpStatus.OK)
-                .status(200)
-                .body(accounts.subList(0,limit));
+        if (limit == 0 || limit == null){
+            return new ResponseEntity<List<Account>>(accounts.subList(0,defaultLimit),HttpStatus.OK)
+                    .status(200)
+                    .body(accounts.subList(0,defaultLimit));
+        }
+        else  {
+            return new ResponseEntity<List<Account>>(accounts.subList(0,limit),HttpStatus.OK)
+                    .status(200)
+                    .body(accounts.subList(0,limit));
+        }
     }
 
 
@@ -72,10 +80,4 @@ public class AccountApiController implements AccountApi {
                 .status(200)
                 .body(account);
     }
-
-
-
-
-
-
 }
