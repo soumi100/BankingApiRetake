@@ -16,6 +16,9 @@ public class TransactionService {
     @Autowired
     private TransactionRepository transactionRepository;
 
+    @Autowired
+    private AccountService accountService;
+
     public List<Transaction> getTransactions()
     {
         return (List<Transaction>) transactionRepository.findAll();
@@ -32,6 +35,25 @@ public class TransactionService {
     {
         //CONFIG USER ACCESS LATER
         return (List<Transaction>) transactionRepository.findTransactionByUserPerformingId(userPerformingId);
+    }
+
+    public boolean checkBalance(String iban, Double amount){
+        Account account = accountService.getAccountByIban(iban);
+        if(account.getIban() == iban){
+
+            // convert double amount type into integer
+            Integer amt = amount.intValue();
+
+            if(account.getBalance() > amt){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else{
+            return false;
+        }
     }
 
     public void createTransaction(Transaction transaction){
