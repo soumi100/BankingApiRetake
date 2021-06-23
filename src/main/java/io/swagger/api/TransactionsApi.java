@@ -35,9 +35,7 @@ public interface TransactionsApi {
     @RequestMapping(value = "/transactions",
             produces = { "application/json" },
             method = RequestMethod.GET)
-    ResponseEntity<List<Transaction>> getTransactions(
-            @Parameter(in = ParameterIn.QUERY, description = "The maximum numbers of items to return, exl" ,
-                    schema=@Schema()) @Valid @RequestParam(value = "limit", required = false) Integer limit);
+    ResponseEntity<List<Transaction>> getTransactions( @Parameter(in = ParameterIn.QUERY, description = "The maximum numbers of items to return, exl" ,schema=@Schema()) @Valid @RequestParam(value = "limit", required = false) Integer limit);
 
 
     @Operation(summary = "get the account with the specific IBAN", description = "", tags={ "Transaction" })
@@ -67,7 +65,8 @@ public interface TransactionsApi {
             produces = { "application/json" },
             method = RequestMethod.GET)
     ResponseEntity<List<Transaction>> getTransactionByUserPerformingId(@Parameter(in = ParameterIn.PATH, description = "return transaction based of the user performing id",
-            schema=@Schema()) @RequestParam(value = "upi", required = false) String userPerformingId) throws NotFoundException;
+            required=true, schema=@Schema()) @PathVariable("userPerformingId") String userPerformingId) throws NotFoundException;
+
 
     //post
     @Operation(summary = "", description = "", security = {
