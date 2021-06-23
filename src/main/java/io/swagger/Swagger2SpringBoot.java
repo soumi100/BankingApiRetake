@@ -35,21 +35,27 @@ public class Swagger2SpringBoot implements CommandLineRunner {
     @Override
     public void run(String... arg0) throws Exception {
         List<Account> accounts = new ArrayList<>();
+
         List<User> users = new ArrayList<>();
 
-        Account account1 = new Account(500l, Account.TypeEnum.CURRENT, Account.CurrencyEnum.EUR, true, "NL01INHO00000000010", 9989);
-        Account account2 = new Account(400l, Account.TypeEnum.SAVINGS, Account.CurrencyEnum.EUR, true, "NL01INHO00000000080", 500);
-        Account account3 = new Account(300l, Account.TypeEnum.CURRENT, Account.CurrencyEnum.EUR, true, "NL01INHO00000000090", 8887);
+        User soumia = new User(1L,"SB",passwordEncoder.encode("pass123"),"soumia","bouhouri","sou@gmx.com",LocalDate.of(1993,8,02),"Rijswijk","2282JV","Rijswijk","062535199", User.TypeEnum.CUSTOMER,true);
+        User user = new User(3L,"user",passwordEncoder.encode("user123"),"user","bouhouri","sou@gmx.com",LocalDate.of(1993,8,02),"Rijswijk","2282JV","Rijswijk","062535199", User.TypeEnum.CUSTOMER,true);
+        User prins = new User(2L,"prinsalvino",passwordEncoder.encode("test123"),"prins","alvino","prinsalvino@gmx.com",LocalDate.of(1993,8,02),"Rijswijk","1156AX","Amsterdam","062535199", User.TypeEnum.EMPLOYEE,true);
+
+        users.add(soumia);
+        users.add(prins);
+        users.add(user);
+
+
+        Account account1 = new Account(soumia.getId(), Account.TypeEnum.CURRENT, Account.CurrencyEnum.EUR, true, "NL01INHO00000000010", 9989);
+        Account account2 = new Account(soumia.getId(), Account.TypeEnum.SAVINGS, Account.CurrencyEnum.EUR, true, "NL01INHO00000000080", 500);
+        Account account3 = new Account(prins.getId(), Account.TypeEnum.CURRENT, Account.CurrencyEnum.EUR, true, "NL01INHO00000000090", 8887);
 
         accounts.add(account1);
         accounts.add(account2);
         accounts.add(account3);
 
-        User soumia = new User(1L,"SB",passwordEncoder.encode("pass123"),"soumia","bouhouri","sou@gmx.com",LocalDate.of(1993,8,02),"Rijswijk","2282JV","Rijswijk","062535199", User.TypeEnum.CUSTOMER,true);
-        User prins = new User(2L,"prinsalvino",passwordEncoder.encode("test123"),"prins","alvino","prinsalvino@gmx.com",LocalDate.of(1993,8,02),"Rijswijk","1156AX","Amsterdam","062535199", User.TypeEnum.EMPLOYEE,true);
 
-        users.add(soumia);
-        users.add(prins);
 
 
         accounts.forEach(accountRepository::save);

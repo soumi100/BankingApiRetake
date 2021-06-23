@@ -22,6 +22,8 @@ public class AccountService {
     @Autowired
     private AuthenticationService authenticationService;
 
+    
+
     public List<Account> getAccounts() {
         return (List<Account>) accountRepository.findAll();
     }
@@ -31,63 +33,41 @@ public class AccountService {
         return account;
     }
 
-    public ResponseEntity addAccount(Account account) throws IllegalAccessException {
+    public Account addAccount(Account accountBody)  {
         if (authenticationService.isEmployee()) {
-            if (getAccountByIban(account.getIban()) == null) {
-                Account NewAccount = new Account();
-                NewAccount.setBalance(0);
-                NewAccount.setActive(true);
-                NewAccount.setCurrency(account.getCurrency());
-                NewAccount.setIban(GenerateRandomIban());
-                NewAccount.setType(account.getType());
-                NewAccount.setUserId(account.getUserId());
-                accountRepository.save(NewAccount);
-                return new ResponseEntity(HttpStatus.OK);
-            } else {
-                return new ResponseEntity(HttpStatus.CONFLICT);
+            if (getAccountByIban(accountBody.getIban()) == null) {
+                accountRepository.save(accountBody);
             }
-        } else {
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
-
-
+        return accountBody;
     }
 
     @DeleteMapping
-    public ResponseEntity deleteAccount(String iban) {
+    public Void deleteAccount(String iban) {
+        // TODO delete an account and its transactions
         if (authenticationService.isEmployee()) {
             Account accountToDelete = accountRepository.getAccountByIban(iban);
             if (accountToDelete != null) {
                 accountToDelete.setDeleted(true);
                 accountRepository.save(accountToDelete);
                 accountRepository.deleteAccountByIban(iban);
-            } else {
-                return new ResponseEntity(HttpStatus.NO_CONTENT);
             }
-
-        } else {
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
-        return new ResponseEntity(HttpStatus.FORBIDDEN);
+        return null;
     }
 
     @PutMapping
-    public ResponseEntity updateAccount(AccountDto newUpdatedAccount, String iban) {
-
+    public Account updateAccount(AccountDto newUpdatedAccount, String iban) {
+        Account accountToUpdate = accountRepository.getAccountByIban(iban);
         if (authenticationService.isEmployee()) {
             if (accountRepository.getAccountByIban(iban) != null) {
-                Account accountToUpdate = accountRepository.getAccountByIban(iban);
                 accountToUpdate.setActive(newUpdatedAccount.getActive());
                 accountToUpdate.setType(newUpdatedAccount.getType());
                 accountToUpdate.setCurrency(newUpdatedAccount.getCurrency());
                 accountRepository.save(accountToUpdate);
-            } else {
-                return new ResponseEntity(HttpStatus.NOT_FOUND);
             }
-        } else {
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
-        return new ResponseEntity(HttpStatus.OK);
+        return accountToUpdate;
     }
 
     public String GenerateRandomIban() {
