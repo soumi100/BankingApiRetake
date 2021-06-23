@@ -19,10 +19,11 @@ import javax.persistence.SequenceGenerator;
 @Getter
 @Setter
 public class AccountDto {
-    public Boolean active;
-    public Account.CurrencyEnum currency;
-    public Account.TypeEnum type;
-    // balance is changed via  transactions
+    private Boolean active;
+    private Long userId;
+    private Account.CurrencyEnum currency;
+    private Account.TypeEnum type;
+    private Integer balance ;
 
 
 }
