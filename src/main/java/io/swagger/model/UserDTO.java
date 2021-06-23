@@ -7,57 +7,57 @@ import org.springframework.validation.annotation.Validated;
 import java.util.Objects;
 
 /**
- * InlineResponse200
+ * Body1
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T11:15:57.209Z[GMT]")
 
 
-public class InlineResponse200 {
-    @JsonProperty("id")
-    private Integer id = null;
+public class UserDTO {
+    @JsonProperty("username")
+    private String username = null;
 
-    @JsonProperty("token")
-    private String token = null;
+    @JsonProperty("password")
+    private String password = null;
 
-    public InlineResponse200 id(Integer id) {
-        this.id = id;
+    public UserDTO username(String username) {
+        this.username = username;
         return this;
     }
 
     /**
-     * The user ID.
+     * Get username
      *
-     * @return id
+     * @return username
      **/
-    @Schema(description = "The user ID.")
+    @Schema(description = "")
 
-    public Integer getId() {
-        return id;
+    public String getUsername() {
+        return username;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public InlineResponse200 token(String token) {
-        this.token = token;
+    public UserDTO password(String password) {
+        this.password = password;
         return this;
     }
 
     /**
-     * The jwt token.
+     * Get password
      *
-     * @return token
+     * @return password
      **/
-    @Schema(description = "The jwt token.")
+    @Schema(description = "")
 
-    public String getToken() {
-        return token;
+    public String getPassword() {
+        return password;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 
@@ -69,23 +69,23 @@ public class InlineResponse200 {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        InlineResponse200 inlineResponse200 = (InlineResponse200) o;
-        return Objects.equals(this.id, inlineResponse200.id) &&
-                Objects.equals(this.token, inlineResponse200.token);
+        UserDTO userDTO = (UserDTO) o;
+        return Objects.equals(this.username, userDTO.username) &&
+                Objects.equals(this.password, userDTO.password);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, token);
+        return Objects.hash(username, password);
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("class InlineResponse200 {\n");
+        sb.append("class Body1 {\n");
 
-        sb.append("    id: ").append(toIndentedString(id)).append("\n");
-        sb.append("    token: ").append(toIndentedString(token)).append("\n");
+        sb.append("    username: ").append(toIndentedString(username)).append("\n");
+        sb.append("    password: ").append(toIndentedString(password)).append("\n");
         sb.append("}");
         return sb.toString();
     }
