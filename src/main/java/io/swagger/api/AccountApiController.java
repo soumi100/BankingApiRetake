@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,13 +40,12 @@ public class AccountApiController implements AccountApi {
 
     @Override
     public ResponseEntity<List<Account>> getAccounts(@Valid @RequestParam(value = "limit", required = false, defaultValue = "3") Integer limit) {
-        List<Account> accounts = accountService.getAccounts();
-        List<Account> accountArrayList = new ArrayList<>();
 
+        List<Account> accountArrayList = new ArrayList<>();
         if (limit < 0 ) {
             return new ResponseEntity<List<Account>>(HttpStatus.BAD_REQUEST);
         } else {
-            for (Account account : accounts) {
+            for (Account account : accountService.getAccounts()) {
                 if (!authenticationService.isEmployee()) {
                     if (account.getUserId().equals(authenticationService.getCurrentUser().getId())) {
                         accountArrayList.add(account);
@@ -65,7 +65,7 @@ public class AccountApiController implements AccountApi {
     public ResponseEntity<Account> getAccountByIBAN(String iban) throws NotFoundException {
         Account account = accountService.getAccountByIban(iban);
         if (!authenticationService.isEmployee()) {
-            if (!account.getId().equals(authenticationService.getCurrentUser().getId())) {
+            if (!account.getUserId().equals(authenticationService.getCurrentUser().getId())) {
                 return new ResponseEntity<Account>(HttpStatus.FORBIDDEN);
             }
         }
@@ -74,27 +74,39 @@ public class AccountApiController implements AccountApi {
 
     @Override
     public ResponseEntity addAccount(@Valid AccountDto accountDto) throws IllegalAccessException {
-        Account account = new Account();
-        account.setBalance(accountDto.getBalance());
-        account.setActive(accountDto.getActive());
-        account.setCurrency(accountDto.getCurrency());
-        account.setIban(accountService.GenerateRandomIban());
-        account.setType(accountDto.getType());
-        account.setUserId(accountDto.getUserId());
-        Account NewAccount = accountService.addAccount(account);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(NewAccount);
+
+        if (!authenticationService.isEmployee()) {
+                return new ResponseEntity<Account>(HttpStatus.FORBIDDEN);
+        }else
+        {
+            Account account = new Account();
+            account.setBalance(accountDto.getBalance());
+            account.setActive(accountDto.getActive());
+            account.setCurrency(accountDto.getCurrency());
+            account.setIban(accountService.GenerateRandomIban());
+            account.setType(accountDto.getType());
+            account.setUserId(accountDto.getUserId());
+            Account NewAccount = accountService.addAccount(account);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(NewAccount);
+        }
+
     }
 
 
     @Override
     public void deleteAccount(String iban) throws NotFoundException {
-        accountService.deleteAccount(iban);
+        if (authenticationService.isEmployee()) {
+            accountService.deleteAccount(iban);
+        }
+
     }
 
     @Override
     public ResponseEntity updateAccount(String IBAN, @Valid AccountDto body) {
+        // update account information can be updated by the customer
+        // TODO add priv later
         Account account = accountService.updateAccount(body, IBAN);
         return ResponseEntity
                 .status(HttpStatus.OK)

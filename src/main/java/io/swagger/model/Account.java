@@ -20,10 +20,9 @@ import java.util.Objects;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T11:15:57.209Z[GMT]")
 public class Account {
     @Id
-    @SequenceGenerator(name = "account_seq", initialValue = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_seq")
-    @JsonProperty("id")
-    private Long id = null;
+    @JsonProperty("iban")
+    private String iban = null;
+
     @JsonProperty("userId")
     private Long userId = null;
     private boolean isDeleted;
@@ -33,8 +32,7 @@ public class Account {
     private CurrencyEnum currency = null;
     @JsonProperty("active")
     private Boolean active = null;
-    @JsonProperty("iban")
-    private String iban = null;
+
     @JsonProperty("balance")
     private Integer balance = null;
 

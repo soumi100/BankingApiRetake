@@ -54,8 +54,8 @@ public interface AccountApi {
     ResponseEntity<Account> getAccountByIBAN(@Parameter(in = ParameterIn.PATH, description = "IBAN of the account to return",
             required = true, schema = @Schema()) @PathVariable("iban") String IBAN) throws NotFoundException;
 
-    @Operation(summary = "open new account", description = "creating an account | customers & Employee", security = {
-            @SecurityRequirement(name = "bearerAuth")},tags={ "employees", "customers" })
+    @Operation(summary = "open new account", description = "creating an account |  Employee", security = {
+            @SecurityRequirement(name = "bearerAuth")},tags={ "employees"})
     @io.swagger.annotations.ApiResponses(value = {
             @io.swagger.annotations.ApiResponse(code = 201, message = "account has been created successfully "),
             @io.swagger.annotations.ApiResponse(code = 400, message = "bad request"),

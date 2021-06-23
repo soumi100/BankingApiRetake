@@ -45,12 +45,10 @@ public class AccountService {
     @DeleteMapping
     public Void deleteAccount(String iban) {
         // TODO delete an account and its transactions
+
         if (authenticationService.isEmployee()) {
-            Account accountToDelete = accountRepository.getAccountByIban(iban);
-            if (accountToDelete != null) {
-                accountToDelete.setDeleted(true);
-                accountRepository.save(accountToDelete);
-                accountRepository.deleteAccountByIban(iban);
+            if (accountRepository.getAccountByIban(iban) != null) {
+                accountRepository.deleteById(iban);
             }
         }
         return null;
