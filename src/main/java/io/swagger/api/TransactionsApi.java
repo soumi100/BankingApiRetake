@@ -52,7 +52,7 @@ public interface TransactionsApi {
     ResponseEntity<List<Transaction>> getTransactionByIban(@Parameter(in = ParameterIn.PATH, description = "IBAN of the account to return",
             required=true, schema=@Schema()) @PathVariable("iban") String IBAN) throws NotFoundException;
 
-
+/*
     @Operation(summary = "return transaction based of the user performing id", description = "", tags={ "Transaction" })
     @io.swagger.annotations.ApiResponses(value = {
             @io.swagger.annotations.ApiResponse(code = 200, message = "entity corresponding to the requested resource"),
@@ -67,7 +67,7 @@ public interface TransactionsApi {
     ResponseEntity<List<Transaction>> getTransactionByUserPerformingId(@Parameter(in = ParameterIn.PATH, description = "return transaction based of the user performing id",
             required=true, schema=@Schema()) @PathVariable("userPerformingId") String userPerformingId) throws NotFoundException;
 
-
+*/
     //post
     @Operation(summary = "", description = "", security = {
             @SecurityRequirement(name = "bearerAuth")    }, tags={ "Transaction" })

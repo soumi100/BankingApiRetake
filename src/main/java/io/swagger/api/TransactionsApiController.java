@@ -65,7 +65,7 @@ public class TransactionsApiController implements TransactionsApi {
                 .body(transactions);
     }
 
-
+/*
     @Override
     public ResponseEntity<List<Transaction>> getTransactionByUserPerformingId(String userPerformingId) throws NotFoundException {
         List<Transaction> transactions =
@@ -74,8 +74,9 @@ public class TransactionsApiController implements TransactionsApi {
                 .status(200)
                 .body(transactions);
     }
+*/
 
-
+    @Override
     public void createTransaction(TransactionDto transactionDto) {
                 Transaction NewTransaction= new Transaction();
                 NewTransaction.setAccountFrom(transactionDto.getAccountFrom());
