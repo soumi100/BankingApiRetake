@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T11:15:57.209Z[GMT]")
@@ -39,31 +40,30 @@ public class AccountApiController implements AccountApi {
     @Override
     public ResponseEntity<List<Account>> getAccounts(@Valid @RequestParam(value = "limit", required = false, defaultValue = "3") Integer limit) {
         List<Account> accounts = accountService.getAccounts();
-        if (limit < 0 || accounts.size() < limit) {
+        List<Account> accountArrayList = new ArrayList<>();
+
+        if (limit < 0 ) {
             return new ResponseEntity<List<Account>>(HttpStatus.BAD_REQUEST);
-        } /*else
-            accounts.forEach(account -> {
-                if (authenticationService.isEmployee()) {
-                    accounts.add(account);
-                }
-                // TODO check why user is annonymous
-                else {
+        } else {
+            for (Account account : accounts) {
+                if (!authenticationService.isEmployee()) {
                     if (account.getUserId().equals(authenticationService.getCurrentUser().getId())) {
-                        accounts.add(account);
+                        accountArrayList.add(account);
                     }
+                } else {
+                    accountArrayList.add(account);
                 }
-            });*/
-        log.info(" currnet user", authenticationService.getCurrentUser().getId().toString());
-        return new ResponseEntity<List<Account>>(accounts.subList(0, limit), HttpStatus.OK)
+            }
+        }
+        return new ResponseEntity<List<Account>>(accountArrayList.subList(0, limit), HttpStatus.OK)
                 .status(200)
-                .body(accounts.subList(0, limit));
+                .body(accountArrayList.subList(0, limit));
     }
 
 
     @Override
     public ResponseEntity<Account> getAccountByIBAN(String iban) throws NotFoundException {
         Account account = accountService.getAccountByIban(iban);
-
         if (!authenticationService.isEmployee()) {
             if (!account.getId().equals(authenticationService.getCurrentUser().getId())) {
                 return new ResponseEntity<Account>(HttpStatus.FORBIDDEN);

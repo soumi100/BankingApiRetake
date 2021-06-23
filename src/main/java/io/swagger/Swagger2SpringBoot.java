@@ -47,9 +47,9 @@ public class Swagger2SpringBoot implements CommandLineRunner {
         users.add(user);
 
 
-        Account account1 = new Account(soumia.getId(), Account.TypeEnum.CURRENT, Account.CurrencyEnum.EUR, true, "NL01INHO00000000010", 9989);
-        Account account2 = new Account(soumia.getId(), Account.TypeEnum.SAVINGS, Account.CurrencyEnum.EUR, true, "NL01INHO00000000080", 500);
-        Account account3 = new Account(prins.getId(), Account.TypeEnum.CURRENT, Account.CurrencyEnum.EUR, true, "NL01INHO00000000090", 8887);
+        Account account1 = new Account(1l, Account.TypeEnum.CURRENT, Account.CurrencyEnum.EUR, true, "NL01INHO00000000010", 9989);
+        Account account2 = new Account(1L, Account.TypeEnum.SAVINGS, Account.CurrencyEnum.EUR, true, "NL01INHO00000000080", 500);
+        Account account3 = new Account(2L, Account.TypeEnum.CURRENT, Account.CurrencyEnum.EUR, true, "NL01INHO00000000090", 8887);
 
         accounts.add(account1);
         accounts.add(account2);
