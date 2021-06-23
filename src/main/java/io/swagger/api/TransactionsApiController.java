@@ -73,20 +73,20 @@ public class TransactionsApiController implements TransactionsApi {
 
     @Override
     public void createTransaction(TransactionDto transactionDto) {
-                Transaction NewTransaction= new Transaction();
-                NewTransaction.setAccountFrom(transactionDto.getAccountFrom());
-                NewTransaction.setAccountTo(transactionDto.getAccountTo());
-                NewTransaction.setAmount(transactionDto.getAmount());
-                NewTransaction.setDescription(transactionDto.getDescription());
+        Transaction NewTransaction = new Transaction();
+        NewTransaction.setAccountFrom(transactionDto.getAccountFrom());
+        NewTransaction.setAccountTo(transactionDto.getAccountTo());
+        NewTransaction.setAmount(transactionDto.getAmount());
+        NewTransaction.setDescription(transactionDto.getDescription());
 
-                //*** addd it to dto
-              //NewTransaction.setUserPerformingId(5l);
-               NewTransaction.setUserPerformingId(1L);
-              NewTransaction.setTransactionType(Transaction.TransactionTypeEnum.TRANSFER);
+        //*** addd it to dto
+        NewTransaction.setUserPerformingId(5l);
+        //NewTransaction.setUserPerformingId(authenticationService.getCurrentUser().getId());
+        NewTransaction.setTransactionType(Transaction.TransactionTypeEnum.TRANSFER);
 
-              OffsetDateTime dtm = OffsetDateTime.now();
-              NewTransaction.setTimestamp(dtm);
-              transactionService.createTransaction(NewTransaction);
+        OffsetDateTime dtm = OffsetDateTime.now();
+        NewTransaction.setTimestamp(dtm);
+        transactionService.createTransaction(NewTransaction);
 
     }
 
