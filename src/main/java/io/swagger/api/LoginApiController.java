@@ -46,7 +46,6 @@ public class LoginApiController implements LoginApi {
         InlineResponse200 response200 = new InlineResponse200();
         String jwt = userService.getLogin(body.getUsername(), body.getPassword());
         response200.setToken(jwt);
-        System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
         return new ResponseEntity<InlineResponse200>(response200, HttpStatus.OK);
     }
 
