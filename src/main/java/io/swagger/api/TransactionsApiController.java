@@ -18,6 +18,7 @@ import org.threeten.bp.ZoneId;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T11:15:57.209Z[GMT]")
@@ -42,19 +43,13 @@ public class TransactionsApiController implements TransactionsApi {
 
     @Override
     public ResponseEntity<List<Transaction>> getTransactions(Integer limit) {
-        List<Transaction> transactions = (List<Transaction>) transactionService.getTransactions();
-        Integer defaultLimit= 2;
-        if (limit > 0 && limit !=null ){
-            return new ResponseEntity<List<Transaction>>(transactions.subList(0,limit),HttpStatus.OK)
+        List<Transaction> transactions =  transactionService.getTransactions();
+        return new ResponseEntity<List<Transaction>>(transactions.subList(0,limit),HttpStatus.OK)
                     .status(200)
                     .body(transactions.subList(0,limit));
-        }else
-        {
-            return new ResponseEntity<List<Transaction>>(transactions.subList(0,defaultLimit),HttpStatus.OK)
-                    .status(200)
-                    .body(transactions.subList(0,defaultLimit));
-        }
+        // solved this
 
+    // wait 5min ok
     }
 
     @Override
@@ -86,7 +81,7 @@ public class TransactionsApiController implements TransactionsApi {
 
                 //*** addd it to dto
               //NewTransaction.setUserPerformingId(5l);
-              NewTransaction.setUserPerformingId(transactionDto.getUserPerformingId());
+               NewTransaction.setUserPerformingId(1L);
               NewTransaction.setTransactionType(Transaction.TransactionTypeEnum.TRANSFER);
 
               OffsetDateTime dtm = OffsetDateTime.now();
