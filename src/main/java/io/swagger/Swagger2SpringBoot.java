@@ -1,8 +1,10 @@
 package io.swagger;
 
 import io.swagger.model.Account;
+import io.swagger.model.Transaction;
 import io.swagger.model.User;
 import io.swagger.repository.AccountRepository;
+import io.swagger.repository.TransactionRepository;
 import io.swagger.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -27,6 +29,9 @@ public class Swagger2SpringBoot implements CommandLineRunner {
     private AccountRepository accountRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private TransactionRepository transactionRepository;
+
 
     public static void main(String[] args) throws Exception {
         new SpringApplication(Swagger2SpringBoot.class).run(args);
@@ -55,19 +60,31 @@ public class Swagger2SpringBoot implements CommandLineRunner {
         accounts.add(account2);
         accounts.add(account3);
 
-
-
-
         accounts.forEach(accountRepository::save);
         users.forEach(userRepository::save);
 
         accountRepository.findAll().forEach(System.out::println);
         userRepository.findAll().forEach(System.out::println);
 
+        List<Transaction> transactions = new ArrayList<>();
+        Transaction transaction1 = new Transaction("NL01INHO00000000010","NL01INHO00000000080",252d,"tikke pay",1L, Transaction.TransactionTypeEnum.DEPOSIT);
+        Transaction transaction2 = new Transaction("NL01INHO00000000080","NL01INHO00000000090",500d,"family support",2L, Transaction.TransactionTypeEnum.TRANSFER);
+
+        transactions.add(transaction1);
+        transactions.add(transaction2);
+
+        transactions.forEach(transactionRepository::save);
+        transactionRepository.findAll().forEach(System.out::println);
+
+        transactionRepository.findTransactionByAccountFrom("NL01INHO00000000010").forEach(System.out::println);
+
+        transactionRepository.findTransactionByUserPerformingId(2L).forEach(System.out::println);
+
         if (arg0.length > 0 && arg0[0].equals("exitcode")) {
             throw new ExitException();
         }
     }
+
 
     class ExitException extends RuntimeException implements ExitCodeGenerator {
         private static final long serialVersionUID = 1L;
