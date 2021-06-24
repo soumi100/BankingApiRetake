@@ -1,6 +1,6 @@
 package io.swagger.filter;
 
-import io.swagger.service.JwtUtil;
+import io.swagger.util.JwtUtil;
 import io.swagger.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

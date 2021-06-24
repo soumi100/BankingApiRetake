@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AuthenticationService {
 
@@ -14,6 +16,7 @@ public class AuthenticationService {
     public boolean isEmployee() {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.getByUserName(name);
+        List<User> userList = userService.getAllUser();
         return user.getType() == User.TypeEnum.EMPLOYEE;
     }
 

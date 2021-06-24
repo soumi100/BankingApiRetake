@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -71,7 +72,7 @@ public class UsersApiController implements UsersApi {
             return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
         }
     }
-
+//    @PreAuthorize("hasAuthority('')")
     public ResponseEntity<List<User>> getUsers(@Parameter(in = ParameterIn.QUERY, description = "Get users based on Last Name" ,
                                                        schema=@Schema()) @Valid @RequestParam(value = "lastname", required = false) String lastname,
                                                @Parameter(in = ParameterIn.QUERY, description = "Maximum numbers of items to return" ,

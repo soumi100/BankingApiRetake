@@ -1,4 +1,4 @@
-package io.swagger.service;
+package io.swagger.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
