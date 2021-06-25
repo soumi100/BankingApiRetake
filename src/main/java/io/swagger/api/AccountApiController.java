@@ -106,7 +106,7 @@ public class AccountApiController implements AccountApi {
     @Override
     public ResponseEntity updateAccount(String IBAN, @Valid AccountDto body) {
         // update account information can be updated by the customer
-        // TODO add priv later
+        // TODO add permission  later
         Account account = accountService.updateAccount(body, IBAN);
         return ResponseEntity
                 .status(HttpStatus.OK)
