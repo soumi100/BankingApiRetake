@@ -54,17 +54,14 @@ public class TransactionsApiController implements TransactionsApi {
 
     @Override
     public ResponseEntity<List<Transaction>> getTransactions(Integer limit) {
+        System.out.println(limit);
         List<Transaction> transactions =  transactionService.getTransactions();
         if (limit == null || transactions.size() < limit){
             limit = transactions.size();
         }
-
         return new ResponseEntity<List<Transaction>>(transactions.subList(0,limit),HttpStatus.OK)
                 .status(200)
                 .body(transactions.subList(0,limit));
-        // solved this
-
-        // wait 5min ok
     }
 
     @Override
@@ -78,6 +75,12 @@ public class TransactionsApiController implements TransactionsApi {
     @Override
     public ResponseEntity<String> createTransaction(@RequestBody TransactionDto transactionDto) throws JSONException {
         JSONObject jsonObject = new JSONObject();
+        Account account = accountService.getAccountByUserId(authenticationService.getCurrentUser().getId());
+
+        if (transactionDto.getAccountFrom()==null){
+            transactionDto.setAccountFrom(account.getIban());
+        }
+
         if(authenticationService.isEmployee()){
             if (setTransaction(transactionDto)){
                 jsonObject.put("message", "Success");
@@ -89,7 +92,6 @@ public class TransactionsApiController implements TransactionsApi {
             }
         }
         else{
-            Account account = accountService.getAccountByUserId(authenticationService.getCurrentUser().getId());
             if (account.getIban() == transactionDto.getAccountFrom()){
                 if(setTransaction(transactionDto)){
                     jsonObject.put("message", "Success");
@@ -99,17 +101,6 @@ public class TransactionsApiController implements TransactionsApi {
                     jsonObject.put("message", "There is something wrong in your body, " +
                             "your balance maybe lower than your wished transfer amount or your IBAN doesnot match" +
                             "your IBAN from");
-                    return new ResponseEntity<String>(jsonObject.toString(), HttpStatus.BAD_REQUEST);
-                }
-            }
-            else if(transactionDto.getAccountFrom()==null) {
-                transactionDto.setAccountFrom(account.getIban());
-                if (setTransaction(transactionDto)) {
-                    jsonObject.put("message", "Success");
-                    return new ResponseEntity<String>(jsonObject.toString(), HttpStatus.OK);
-                } else {
-                    jsonObject.put("message", "There is something wrong in your body, " +
-                            "your balance maybe lower than your wished transfer amount");
                     return new ResponseEntity<String>(jsonObject.toString(), HttpStatus.BAD_REQUEST);
                 }
             }
