@@ -6,6 +6,7 @@ import io.swagger.model.User;
 import io.swagger.repository.AccountRepository;
 import io.swagger.repository.TransactionRepository;
 import io.swagger.repository.UserRepository;
+import io.swagger.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.ExitCodeGenerator;
@@ -31,6 +32,9 @@ public class Swagger2SpringBoot implements CommandLineRunner {
     private UserRepository userRepository;
     @Autowired
     private TransactionRepository transactionRepository;
+
+    @Autowired
+    private TransactionService transactionService; //for test
 
 
     public static void main(String[] args) throws Exception {
@@ -79,6 +83,13 @@ public class Swagger2SpringBoot implements CommandLineRunner {
         transactionRepository.findTransactionByAccountFrom("NL01INHO00000000010").forEach(System.out::println);
 
         transactionRepository.findTransactionByUserPerformingId(2L).forEach(System.out::println);
+
+        if(transactionService.checkBalance("NL01INHO00000000010", 9990.0)){  //9989 balance
+            System.out.println("works");
+        }
+        else{
+            System.out.println("out of balance");
+        }
 
         if (arg0.length > 0 && arg0[0].equals("exitcode")) {
             throw new ExitException();

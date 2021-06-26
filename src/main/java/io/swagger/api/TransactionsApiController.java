@@ -64,33 +64,24 @@ public class TransactionsApiController implements TransactionsApi {
                 .body(transactions);
     }
 
-/*
-    @Override
-    public ResponseEntity<List<Transaction>> getTransactionByUserPerformingId(String userPerformingId) throws NotFoundException {
-        List<Transaction> transactions =
-                (List<Transaction>) transactionService.getTransactionByUserPerformingId(Long.valueOf(userPerformingId)) ;
-        return ResponseEntity
-                .status(200)
-                .body(transactions);
-    }
-*/
-
     @Override
     public void createTransaction(TransactionDto transactionDto) {
-        Transaction NewTransaction = new Transaction();
-        NewTransaction.setAccountFrom(transactionDto.getAccountFrom());
-        NewTransaction.setAccountTo(transactionDto.getAccountTo());
-        NewTransaction.setAmount(transactionDto.getAmount());
-        NewTransaction.setDescription(transactionDto.getDescription());
 
-        //*** addd it to dto
-        //NewTransaction.setUserPerformingId(5l);
-        NewTransaction.setUserPerformingId(authenticationService.getCurrentUser().getId());
-        NewTransaction.setTransactionType(Transaction.TransactionTypeEnum.TRANSFER);
+        if(transactionService.checkBalance(transactionDto.getAccountFrom(),transactionDto.getAmount() )){
 
-        OffsetDateTime dtm = OffsetDateTime.now();
-        NewTransaction.setTimestamp(dtm);
-        transactionService.createTransaction(NewTransaction);
+            Transaction NewTransaction = new Transaction();
+            NewTransaction.setAccountFrom(transactionDto.getAccountFrom());
+            NewTransaction.setAccountTo(transactionDto.getAccountTo());
+            NewTransaction.setAmount(transactionDto.getAmount());
+            NewTransaction.setDescription(transactionDto.getDescription());
+            NewTransaction.setUserPerformingId(authenticationService.getCurrentUser().getId());
+            NewTransaction.setTransactionType(Transaction.TransactionTypeEnum.TRANSFER);
+
+            OffsetDateTime dtm = OffsetDateTime.now();
+            NewTransaction.setTimestamp(dtm);
+            transactionService.createTransaction(NewTransaction);
+        }
+
 
     }
 
