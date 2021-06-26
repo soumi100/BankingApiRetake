@@ -8,6 +8,8 @@ import io.swagger.util.UserValidation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,25 +50,33 @@ public class UsersApiController implements UsersApi {
         this.request = request;
     }
 
-    public ResponseEntity<String> createUser(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody User body) {
+    public ResponseEntity<String> createUser(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody User body) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
         if (authenticationService.isEmployee() == true) {
             if(userService.getByUserName(body.getUsername()) != null){
-                return new ResponseEntity<String>("User already exists",HttpStatus.BAD_REQUEST);
+                jsonObject.put("message", "User already exists");
+                return new ResponseEntity<String>(jsonObject.toString(),HttpStatus.BAD_REQUEST);
             }
             if(body.getType() == null){
                 body.setType(User.TypeEnum.CUSTOMER);
             }
             if(userValidation.checkValidEmail(body.getEmail()) == false){
-                return new ResponseEntity<String>("Bad email input",HttpStatus.BAD_REQUEST);
+                jsonObject.put("message", "Bad email input");
+                return new ResponseEntity<String>(jsonObject.toString(),HttpStatus.BAD_REQUEST);
             }
             if(userValidation.checkValidNumber(body.getPhoneNumber()) == false){
-                return new ResponseEntity<String>("Bad phone number input and must be 10 digit",HttpStatus.BAD_REQUEST);
+                jsonObject.put("message", "Bad phone number input and must be 10 digit");
+                return new ResponseEntity<String>(jsonObject.toString(),HttpStatus.BAD_REQUEST);
             }
             if(userValidation.checkValidBirthDate(body.getBirthdate()) == true){
-                return new ResponseEntity<String>("Bad birth date input, must be (yyyy-MM-dd) and before today",HttpStatus.BAD_REQUEST);
+                jsonObject.put("message", "Bad birth date input, must be (yyyy-MM-dd) and before today");
+
+                return new ResponseEntity<String>(jsonObject.toString(),HttpStatus.BAD_REQUEST);
             }
             userService.createUser(body);
-            return new ResponseEntity<String>("User is created",HttpStatus.CREATED);
+            jsonObject.put("message", "User is created");
+
+            return new ResponseEntity<String>(jsonObject.toString(),HttpStatus.CREATED);
         }
         else{
             return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
