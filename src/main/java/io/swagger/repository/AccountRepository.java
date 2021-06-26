@@ -10,6 +10,7 @@ import java.util.List;
 public interface AccountRepository extends CrudRepository<Account, String> {
     void deleteAccountByIban(String iban);
     Account getAccountByIban(String iban);
+    List<Account> getAccountByUserId(Long id);
     // get accounts of the current user
     List<Account> getAccountsByUserId(Long userId);
 }

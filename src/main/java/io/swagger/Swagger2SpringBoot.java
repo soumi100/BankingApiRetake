@@ -67,8 +67,6 @@ public class Swagger2SpringBoot implements CommandLineRunner {
         accounts.forEach(accountRepository::save);
         users.forEach(userRepository::save);
 
-        accountRepository.findAll().forEach(System.out::println);
-        userRepository.findAll().forEach(System.out::println);
 
         List<Transaction> transactions = new ArrayList<>();
         Transaction transaction1 = new Transaction("NL01INHO00000000010","NL01INHO00000000080",252d,"tikke pay",1L, Transaction.TransactionTypeEnum.DEPOSIT);
@@ -78,18 +76,6 @@ public class Swagger2SpringBoot implements CommandLineRunner {
         transactions.add(transaction2);
 
         transactions.forEach(transactionRepository::save);
-        transactionRepository.findAll().forEach(System.out::println);
-
-        transactionRepository.findTransactionByAccountFrom("NL01INHO00000000010").forEach(System.out::println);
-
-        transactionRepository.findTransactionByUserPerformingId(2L).forEach(System.out::println);
-
-        if(transactionService.checkBalance("NL01INHO00000000010", 9990.0)){  //9989 balance
-            System.out.println("works");
-        }
-        else{
-            System.out.println("out of balance");
-        }
 
         if (arg0.length > 0 && arg0[0].equals("exitcode")) {
             throw new ExitException();
