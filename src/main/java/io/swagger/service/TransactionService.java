@@ -58,15 +58,5 @@ public class TransactionService {
         transactionRepository.save(transaction);
     }
 
-    public void deposit(Account account, Double value){
-        account.setBalance(account.getBalance() + value.intValue());
-        accountService.updateBalance(account);
-    }
-
-    public void withdraw(Account account, Double value){
-        account.setBalance(account.getBalance() - value.intValue());
-        accountService.updateBalance(account);
-    }
-
 
 }
