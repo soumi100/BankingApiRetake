@@ -12,9 +12,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     User getUserById(Long value);
 
-    @Query(value = "SELECT * FROM user limit :limit", nativeQuery = true)
-    List<User> getUsersWithLimit(int limit);
-
     List<User> findByFirstNameAndLastName(String firstname, String lastname);
 
     List<User> findByFirstName(String firstname);
@@ -22,9 +19,4 @@ public interface UserRepository extends CrudRepository<User, Long> {
     User findByUsername(String value);
 
     User findByLastName(String value);
-
-    @Query(value = "SELECT * FROM user u WHERE u.lastName = :lastName limit :limit", nativeQuery = true)
-    User findByLastNameWithLimit(String lastName, int limit);
-
-
 }

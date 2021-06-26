@@ -49,9 +49,6 @@ public class UserService implements UserDetailsService {
     public List<User> getAllUser(){
         return (List<User>) userRepository.findAll();
     }
-    public List<User> getAllUserWithLimit(int limit){
-        return userRepository.getUsersWithLimit(limit);
-    }
 
     public void createUser(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -121,6 +118,9 @@ public class UserService implements UserDetailsService {
         }
         if (newUserData.getFirstName() != null) {
             target.setFirstName(newUserData.getFirstName());
+        }
+        if(newUserData.getPassword() != null){
+            target.setPassword(passwordEncoder.encode(newUserData.getPassword()));
         }
         userRepository.save(target);
     }
