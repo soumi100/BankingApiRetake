@@ -2,3 +2,15 @@
 target/classes/io/swagger/api/UsersApi.class
 target/classes/io/swagger/api/UsersApiController.class
 target/test-classes/io/swagger/UserControllerTest.class
+target/classes/application.properties
+target/classes/io/swagger/api/TransactionsApi.class
+target/classes/io/swagger/api/TransactionsApiController.class
+target/classes/io/swagger/api/UsersApi.class
+target/classes/io/swagger/api/UsersApiController.class
+target/classes/io/swagger/repository/AccountRepository.class
+target/classes/io/swagger/repository/UserRepository.class
+target/classes/io/swagger/service/AccountService.class
+target/classes/io/swagger/service/TransactionService.class
+target/classes/io/swagger/service/UserService.class
+target/classes/io/swagger/Swagger2SpringBoot$ExitException.class
+target/classes/io/swagger/Swagger2SpringBoot.class

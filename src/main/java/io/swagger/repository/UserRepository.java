@@ -15,6 +15,10 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @Query(value = "SELECT * FROM user limit :limit", nativeQuery = true)
     List<User> getUsersWithLimit(int limit);
 
+    List<User> findByFirstNameAndLastName(String firstname, String lastname);
+
+    List<User> findByFirstName(String firstname);
+
     User findByUsername(String value);
 
     User findByLastName(String value);

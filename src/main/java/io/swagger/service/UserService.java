@@ -82,6 +82,14 @@ public class UserService implements UserDetailsService {
         userRepository.deleteById(id);
     }
 
+    public List<User> findByFirstNameAndLastName(String firstname, String lastname){
+        return userRepository.findByFirstNameAndLastName(firstname,lastname);
+    }
+
+    public List<User> findByFirstName(String firstname){
+        return userRepository.findByFirstName(firstname);
+    }
+
     public void updateUserById(Long id, User newUserData){
         User target = userRepository.getUserById(id);
         if (newUserData.getType() != null) {
