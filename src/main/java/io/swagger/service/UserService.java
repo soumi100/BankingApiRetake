@@ -70,9 +70,7 @@ public class UserService implements UserDetailsService {
     }
 
     public List<User> getByLastName(String lastname){
-        List<User> users = new ArrayList<>();
-        users.add(userRepository.findByLastName(lastname));
-        return users;
+        return userRepository.findByLastName(lastname);
     }
 
     public void deleteUserByID(Long id){
