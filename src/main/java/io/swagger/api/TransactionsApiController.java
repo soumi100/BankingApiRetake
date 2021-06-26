@@ -69,13 +69,10 @@ public class TransactionsApiController implements TransactionsApi {
 
     @Override
     public ResponseEntity<List<Transaction>> getTransactionByIban(String iban) throws NotFoundException {
-        if (authenticationService.isEmployee()){
-            List<Transaction> transactions = (List<Transaction>) transactionService.getTransactionByIban(iban) ;
-            return ResponseEntity
-                    .status(200)
-                    .body(transactions);
-        }
-        return new ResponseEntity<List<Transaction>>(HttpStatus.UNAUTHORIZED);
+        List<Transaction> transactions = (List<Transaction>) transactionService.getTransactionByIban(iban) ;
+        return ResponseEntity
+                .status(200)
+                .body(transactions);
     }
 
     @Override
@@ -84,7 +81,7 @@ public class TransactionsApiController implements TransactionsApi {
         if(authenticationService.isEmployee()){
             if (setTransaction(transactionDto)){
                 jsonObject.put("message", "Success");
-                return new ResponseEntity<String>(jsonObject.toString(),HttpStatus.CREATED);
+                return new ResponseEntity<String>(jsonObject.toString(),HttpStatus.OK);
             }
             else{
                 jsonObject.put("message", "There is something wrong in your body, your balance maybe lower than your wished transfer amount");
@@ -96,7 +93,7 @@ public class TransactionsApiController implements TransactionsApi {
             if (account.getIban() == transactionDto.getAccountFrom()){
                 if(setTransaction(transactionDto)){
                     jsonObject.put("message", "Success");
-                    return new ResponseEntity<String>(jsonObject.toString(),HttpStatus.CREATED);
+                    return new ResponseEntity<String>(jsonObject.toString(),HttpStatus.OK);
                 }
                 else {
                     jsonObject.put("message", "There is something wrong in your body, " +
@@ -109,7 +106,7 @@ public class TransactionsApiController implements TransactionsApi {
                 transactionDto.setAccountFrom(account.getIban());
                 if (setTransaction(transactionDto)) {
                     jsonObject.put("message", "Success");
-                    return new ResponseEntity<String>(jsonObject.toString(), HttpStatus.CREATED);
+                    return new ResponseEntity<String>(jsonObject.toString(), HttpStatus.OK);
                 } else {
                     jsonObject.put("message", "There is something wrong in your body, " +
                             "your balance maybe lower than your wished transfer amount");
@@ -123,25 +120,6 @@ public class TransactionsApiController implements TransactionsApi {
             }
         }
     }
-
-//    // Not sure if user can deposit or withdraw using API
-//    @Override
-//    public ResponseEntity<String> doDeposit(double value) throws JSONException {
-//        JSONObject jsonObject = new JSONObject();
-//        Account account = accountService.getAccountByUserId(authenticationService.getCurrentUser().getId());
-//        transactionService.deposit(account, value);
-//        jsonObject.put("message", "Success");
-//        return new ResponseEntity<String>(jsonObject.toString(), HttpStatus.CREATED);
-//    }
-//
-//    @Override
-//    public ResponseEntity<String> doWithdraw(double value) throws JSONException {
-//        JSONObject jsonObject = new JSONObject();
-//        Account account = accountService.getAccountByUserId(authenticationService.getCurrentUser().getId());
-//        transactionService.withdraw(account, value);
-//        jsonObject.put("message", "Success");
-//        return new ResponseEntity<String>(jsonObject.toString(), HttpStatus.CREATED);    }
-
     private boolean setTransaction(TransactionDto transactionDto) {
         if (transactionService.checkBalance(transactionDto.getAccountFrom(), transactionDto.getAmount())) {
 
