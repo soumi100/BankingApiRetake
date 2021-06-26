@@ -54,17 +54,11 @@ public class TransactionsApiController implements TransactionsApi {
 
     @Override
     public ResponseEntity<List<Transaction>> getTransactions(Integer limit) {
-        System.out.println(limit);
         List<Transaction> transactions =  transactionService.getTransactions();
-        if (transactions.size() < limit){
+        if (limit == null || transactions.size() < limit){
             limit = transactions.size();
         }
-        else if (limit == null){
-            limit = transactions.size();
-        }
-        else{
 
-        }
         return new ResponseEntity<List<Transaction>>(transactions.subList(0,limit),HttpStatus.OK)
                 .status(200)
                 .body(transactions.subList(0,limit));
