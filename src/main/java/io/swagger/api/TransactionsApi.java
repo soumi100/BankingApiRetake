@@ -70,4 +70,33 @@ public interface TransactionsApi {
             method = RequestMethod.POST)
     ResponseEntity<String> createTransaction(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody TransactionDto body) throws JSONException;
 
+//    //post
+//    @Operation(summary = "", description = "", security = {
+//            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Transaction" })
+//    @io.swagger.annotations.ApiResponses(value = {
+//            @io.swagger.annotations.ApiResponse(code = 200, message = "list of returned transactions"),
+//            @io.swagger.annotations.ApiResponse(code = 400, message = "bad request"),
+//            @io.swagger.annotations.ApiResponse(code = 401, message = "Unauthorized"),
+//            @io.swagger.annotations.ApiResponse(code = 404, message = "The specified resource was not found")
+//    })
+//    @RequestMapping(value = "/deposit",
+//            produces = { "application/json" },
+//            consumes = { "application/json" },
+//            method = RequestMethod.POST)
+//    ResponseEntity<String> doDeposit(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody double value) throws JSONException;
+//
+//    //post
+//    @Operation(summary = "", description = "", security = {
+//            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Transaction" })
+//    @io.swagger.annotations.ApiResponses(value = {
+//            @io.swagger.annotations.ApiResponse(code = 200, message = "list of returned transactions"),
+//            @io.swagger.annotations.ApiResponse(code = 400, message = "bad request"),
+//            @io.swagger.annotations.ApiResponse(code = 401, message = "Unauthorized"),
+//            @io.swagger.annotations.ApiResponse(code = 404, message = "The specified resource was not found")
+//    })
+//    @RequestMapping(value = "/withdraw",
+//            produces = { "application/json" },
+//            consumes = { "application/json" },
+//            method = RequestMethod.POST)
+//    ResponseEntity<String> doWithdraw(@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody double value) throws JSONException;
 }
