@@ -44,12 +44,12 @@ public class Swagger2SpringBoot implements CommandLineRunner {
     @Override
     public void run(String... arg0) throws Exception {
         List<Account> accounts = new ArrayList<>();
-
         List<User> users = new ArrayList<>();
+        List<Transaction> transactions = new ArrayList<>();
 
-        User soumia = new User(1L,"SB",passwordEncoder.encode("pass123"),"soumia","bouhouri","sou@gmx.com",LocalDate.of(1993,8,02),"Rijswijk","2282JV","Rijswijk","062535199", User.TypeEnum.CUSTOMER,true);
-        User user = new User(3L,"user",passwordEncoder.encode("user123"),"user","bouhouri","sou@gmx.com",LocalDate.of(1993,8,02),"Rijswijk","2282JV","Rijswijk","062535199", User.TypeEnum.CUSTOMER,true);
-        User prins = new User(2L,"prinsalvino",passwordEncoder.encode("test123"),"prins","alvino","prinsalvino@gmx.com",LocalDate.of(1993,8,02),"Rijswijk","1156AX","Amsterdam","062535199", User.TypeEnum.EMPLOYEE,true);
+        User soumia = new User(1L, "SB", passwordEncoder.encode("pass123"), "soumia", "bouhouri", "sou@gmx.com", LocalDate.of(1993, 8, 02), "Rijswijk", "2282JV", "Rijswijk", "062535199", User.TypeEnum.CUSTOMER, true);
+        User user = new User(3L, "user", passwordEncoder.encode("user123"), "user", "bouhouri", "sou@gmx.com", LocalDate.of(1993, 8, 02), "Rijswijk", "2282JV", "Rijswijk", "062535199", User.TypeEnum.CUSTOMER, true);
+        User prins = new User(2L, "prinsalvino", passwordEncoder.encode("test123"), "prins", "alvino", "prinsalvino@gmx.com", LocalDate.of(1993, 8, 02), "Rijswijk", "1156AX", "Amsterdam", "062535199", User.TypeEnum.EMPLOYEE, true);
 
         users.add(soumia);
         users.add(prins);
@@ -64,17 +64,14 @@ public class Swagger2SpringBoot implements CommandLineRunner {
         accounts.add(account2);
         accounts.add(account3);
 
-        accounts.forEach(accountRepository::save);
-        users.forEach(userRepository::save);
-
-
-        List<Transaction> transactions = new ArrayList<>();
-        Transaction transaction1 = new Transaction("NL01INHO00000000010","NL01INHO00000000080",252d,"tikke pay",1L, Transaction.TransactionTypeEnum.DEPOSIT);
-        Transaction transaction2 = new Transaction("NL01INHO00000000080","NL01INHO00000000090",500d,"family support",2L, Transaction.TransactionTypeEnum.TRANSFER);
+        Transaction transaction1 = new Transaction("NL01INHO00000000010", "NL01INHO00000000080", 252d, "tikke pay", 1L, Transaction.TransactionTypeEnum.DEPOSIT);
+        Transaction transaction2 = new Transaction("NL01INHO00000000080", "NL01INHO00000000090", 500d, "family support", 2L, Transaction.TransactionTypeEnum.TRANSFER);
 
         transactions.add(transaction1);
         transactions.add(transaction2);
 
+        accounts.forEach(accountRepository::save);
+        users.forEach(userRepository::save);
         transactions.forEach(transactionRepository::save);
 
         if (arg0.length > 0 && arg0[0].equals("exitcode")) {
