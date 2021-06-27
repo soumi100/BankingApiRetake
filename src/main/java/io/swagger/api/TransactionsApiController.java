@@ -1,8 +1,8 @@
 package io.swagger.api;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.model.Account;
 import io.swagger.model.Transaction;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.model.TransactionDto;
 import io.swagger.service.AccountService;
 import io.swagger.service.AuthenticationService;
@@ -16,14 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.threeten.bp.Instant;
-import org.threeten.bp.LocalDate;
 import org.threeten.bp.OffsetDateTime;
-import org.threeten.bp.ZoneId;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T11:15:57.209Z[GMT]")
