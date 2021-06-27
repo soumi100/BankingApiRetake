@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 @Service
@@ -31,7 +32,10 @@ public class AccountService {
 
     public Account getAccountByIban(String iban) {
         Account account = accountRepository.getAccountByIban(iban);
-        return account;
+        if (Objects.isNull(account)) {
+            return null;
+        } else
+            return account;
     }
 
     public Account getAccountByUserId(Long id) {

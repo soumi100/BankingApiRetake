@@ -42,6 +42,7 @@ public interface AccountApi {
             @io.swagger.annotations.ApiResponse(code = 200, message = "Entity corresponding to the requested resource"),
             @io.swagger.annotations.ApiResponse(code = 403, message = "Forbidden"),
             @io.swagger.annotations.ApiResponse(code = 401, message = "Unauthorized"),
+            @io.swagger.annotations.ApiResponse(code = 404, message = "Not Found"),
     })
     @RequestMapping(value = "/accounts/{iban}",
             produces = {"application/json"},

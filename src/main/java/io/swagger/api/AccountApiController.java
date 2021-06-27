@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-02T11:15:57.209Z[GMT]")
 @RestController
@@ -63,8 +64,10 @@ public class AccountApiController implements AccountApi {
     @Override
     public ResponseEntity<Account> getAccountByIBAN(String iban) throws NotFoundException {
         Account account = accountService.getAccountByIban(iban);
+        if (Objects.isNull(account)){
+            return new ResponseEntity<Account>(HttpStatus.NOT_FOUND);
+        }
         // not logged in at all : 401 Unauthorized
-
         if (!authenticationService.isEmployee()) {
 
             if (authenticationService.getCurrentUser().getId() == null) {
@@ -81,10 +84,7 @@ public class AccountApiController implements AccountApi {
     @Override
     public ResponseEntity addAccount(@Valid AccountDto accountDto) throws IllegalAccessException {
 
-        if (!authenticationService.isEmployee()) {
-            // don't have sufficient privileges
-            return new ResponseEntity<Account>(HttpStatus.FORBIDDEN);
-        } else {
+        if (authenticationService.isEmployee()) {
             Account account = new Account();
             account.setBalance(accountDto.getBalance());
             account.setActive(accountDto.getActive());
@@ -96,6 +96,10 @@ public class AccountApiController implements AccountApi {
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(NewAccount);
+
+        } else {
+            // don't have sufficient privileges
+            return new ResponseEntity<Account>(HttpStatus.FORBIDDEN);
         }
 
     }
