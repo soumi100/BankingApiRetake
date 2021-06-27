@@ -1,17 +1,20 @@
 package io.swagger.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.validation.annotation.Validated;
+import lombok.NoArgsConstructor;
+import org.threeten.bp.LocalDate;
 import org.threeten.bp.OffsetDateTime;
+import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.util.Objects;
+import javax.validation.constraints.*;
 
 /**
  * Transaction
@@ -22,7 +25,7 @@ import java.util.Objects;
 @Entity
 @Data
 
-public class Transaction {
+public class Transaction   {
     @Id
     @SequenceGenerator(name = "trans_seq", initialValue = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "trans_seq")
@@ -48,8 +51,6 @@ public class Transaction {
 
     @JsonProperty("userPerformingId")
     private Long userPerformingId = null;
-    @JsonProperty("transactionType")
-    private TransactionTypeEnum transactionType = null;
 
     public Transaction(Long id, OffsetDateTime timestamp, String accountFrom, String accountTo, Double amount, String description, Long userPerformingId, TransactionTypeEnum transactionType) {
         this.id = id;
@@ -74,7 +75,6 @@ public class Transaction {
 
     public Transaction() {
     }
-
     public Transaction(String accountFrom, String accountTo, Double amount, String description, Long userPerformingId, TransactionTypeEnum transactionType) {
         setTimestamp(OffsetDateTime.now());
         setAccountFrom(accountFrom);
@@ -85,6 +85,41 @@ public class Transaction {
         setTransactionType(transactionType);
     }
 
+    /**
+     * Gets or Sets transactionType
+     */
+    public enum TransactionTypeEnum {
+        DEPOSIT("Deposit"),
+
+        WITHDRAWAL("Withdrawal"),
+
+        TRANSFER("Transfer");
+
+        private String value;
+
+        TransactionTypeEnum(String value) {
+            this.value = value;
+        }
+
+        @Override
+        @JsonValue
+        public String toString() {
+            return String.valueOf(value);
+        }
+
+        @JsonCreator
+        public static TransactionTypeEnum fromValue(String text) {
+            for (TransactionTypeEnum b : TransactionTypeEnum.values()) {
+                if (String.valueOf(b.value).equals(text)) {
+                    return b;
+                }
+            }
+            return null;
+        }
+    }
+    @JsonProperty("transactionType")
+    private TransactionTypeEnum transactionType = null;
+
     public Transaction id(Long id) {
         this.id = id;
         return this;
@@ -92,7 +127,6 @@ public class Transaction {
 
     /**
      * Get id
-     *
      * @return id
      **/
     @Schema(example = "10000000001", description = "")
@@ -112,7 +146,6 @@ public class Transaction {
 
     /**
      * Get timestamp
-     *
      * @return timestamp
      **/
     @Schema(example = "2021-05-07T12:32:28Z", required = true, description = "")
@@ -134,7 +167,6 @@ public class Transaction {
 
     /**
      * Get accountFrom
-     *
      * @return accountFrom
      **/
     @Schema(example = "NL01INHO0000000000", description = "")
@@ -154,7 +186,6 @@ public class Transaction {
 
     /**
      * Get accountTo
-     *
      * @return accountTo
      **/
     @Schema(example = "NL01INHO0000000000", description = "")
@@ -174,7 +205,6 @@ public class Transaction {
 
     /**
      * Get amount
-     *
      * @return amount
      **/
     @Schema(example = "100", required = true, description = "")
@@ -195,7 +225,6 @@ public class Transaction {
 
     /**
      * Get description
-     *
      * @return description
      **/
     @Schema(example = "Money for your new RB-17", description = "")
@@ -215,7 +244,6 @@ public class Transaction {
 
     /**
      * Get userPerformingId
-     *
      * @return userPerformingId
      **/
     @Schema(example = "10000000001", required = true, description = "")
@@ -236,7 +264,6 @@ public class Transaction {
 
     /**
      * Get transactionType
-     *
      * @return transactionType
      **/
     @Schema(example = "Deposit", required = true, description = "")
@@ -249,6 +276,7 @@ public class Transaction {
     public void setTransactionType(TransactionTypeEnum transactionType) {
         this.transactionType = transactionType;
     }
+
 
     @Override
     public boolean equals(java.lang.Object o) {
@@ -300,38 +328,5 @@ public class Transaction {
             return "null";
         }
         return o.toString().replace("\n", "\n    ");
-    }
-
-    /**
-     * Gets or Sets transactionType
-     */
-    public enum TransactionTypeEnum {
-        DEPOSIT("Deposit"),
-
-        WITHDRAWAL("Withdrawal"),
-
-        TRANSFER("Transfer");
-
-        private String value;
-
-        TransactionTypeEnum(String value) {
-            this.value = value;
-        }
-
-        @JsonCreator
-        public static TransactionTypeEnum fromValue(String text) {
-            for (TransactionTypeEnum b : TransactionTypeEnum.values()) {
-                if (String.valueOf(b.value).equals(text)) {
-                    return b;
-                }
-            }
-            return null;
-        }
-
-        @Override
-        @JsonValue
-        public String toString() {
-            return String.valueOf(value);
-        }
     }
 }
