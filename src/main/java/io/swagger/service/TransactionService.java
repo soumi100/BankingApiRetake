@@ -27,7 +27,6 @@ public class TransactionService {
 
     public List<Transaction> getTransactionByIban(String IBAN) //getting transactions from a specific user iban
     {
-        //CONFIG USER ACCESS LATER
         return (List<Transaction>) transactionRepository.findTransactionByAccountFrom(IBAN);
     }
 
