@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -25,76 +24,68 @@ import java.util.List;
 @Validated
 public interface AccountApi {
 
-    @Operation(summary = "get accounts with an offset", description = "Calling this allows you to fetch all accounts", security = {
-            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Accounts" })
+
+    @Operation(summary = "Get accounts with an offset", description = "A customer gets its accounts only  & Employee", security = {
+            @SecurityRequirement(name = "bearerAuth")}, tags = {"employees", "customers"})
     @io.swagger.annotations.ApiResponses(value = {
-            @io.swagger.annotations.ApiResponse(code = 200, message = "list of returned accounts"),
-            @io.swagger.annotations.ApiResponse(code = 400, message = "bad request"),
-            @io.swagger.annotations.ApiResponse(code = 401, message = "Unauthorized"),
-            @io.swagger.annotations.ApiResponse(code = 409, message = "already exists"),
-            @io.swagger.annotations.ApiResponse(code = 404, message = "The specified resource was not found")
+            @io.swagger.annotations.ApiResponse(code = 200, message = "List of returned accounts"),
+            @io.swagger.annotations.ApiResponse(code = 400, message = "Bad request ")
     })
     @RequestMapping(value = "/accounts",
-            produces = { "application/json" },
+            produces = {"application/json"},
             method = RequestMethod.GET)
-    ResponseEntity<List<Account>> getAccounts(@Parameter(in = ParameterIn.QUERY, description = "The maximum numbers of items to return, exl" ,schema=@Schema()) @Valid @RequestParam(value = "limit", required = false) Integer limit);
+    ResponseEntity<List<Account>> getAccounts(@RequestParam(value = "limit", required = false) Integer limit);
 
 
-    @Operation(summary = "get the account with the specific IBAN", description = "", tags={ "Accounts" })
+    @Operation(summary = "Get the account with the specific IBAN", description = "A customer gets his account only  & Employee", tags = {"employee", "customers"})
     @io.swagger.annotations.ApiResponses(value = {
-            @io.swagger.annotations.ApiResponse(code = 200, message = "entity corresponding to the requested resource"),
-            @io.swagger.annotations.ApiResponse(code = 400, message = "bad request"),
-            @io.swagger.annotations.ApiResponse(code = 409, message = "already exists"),
+            @io.swagger.annotations.ApiResponse(code = 200, message = "Entity corresponding to the requested resource"),
+            @io.swagger.annotations.ApiResponse(code = 403, message = "Forbidden"),
             @io.swagger.annotations.ApiResponse(code = 401, message = "Unauthorized"),
-            @io.swagger.annotations.ApiResponse(code = 404, message = "The requested resource could not be found")
+            @io.swagger.annotations.ApiResponse(code = 404, message = "Not Found"),
     })
     @RequestMapping(value = "/accounts/{iban}",
-            produces = { "application/json" },
+            produces = {"application/json"},
             method = RequestMethod.GET)
     ResponseEntity<Account> getAccountByIBAN(@Parameter(in = ParameterIn.PATH, description = "IBAN of the account to return",
-            required=true, schema=@Schema()) @PathVariable("iban") String IBAN) throws NotFoundException;
+            required = true, schema = @Schema()) @PathVariable("iban") String IBAN) throws NotFoundException;
 
-    @Operation(summary = "create new account", description = "Calling this will create a new account", security = {
-            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Accounts" })
+    @Operation(summary = "Open new account", description = "Creating an account |  Employee", security = {
+            @SecurityRequirement(name = "bearerAuth")}, tags = {"employees"})
     @io.swagger.annotations.ApiResponses(value = {
-            @io.swagger.annotations.ApiResponse(code = 201, message = "creating a new resource."),
-            @io.swagger.annotations.ApiResponse(code = 400, message = "bad request"),
-            @io.swagger.annotations.ApiResponse(code = 401, message = "Unauthorized"),
-            @io.swagger.annotations.ApiResponse(code = 409, message = "already exists"),
-            @io.swagger.annotations.ApiResponse(code = 404, message = "The specified resource was not found")
+            @io.swagger.annotations.ApiResponse(code = 403, message = "Forbidden"),
+            @io.swagger.annotations.ApiResponse(code = 200, message = "Account has been created successfully"),
     })
-    @RequestMapping(value = "/accounts", consumes = { "application/json" }, method = RequestMethod.POST)
-    ResponseEntity<Account> addAccount(@ApiParam(value = ""  )  @Valid @RequestBody Account account);
+    @RequestMapping(value = "/accounts", consumes = {"application/json"}, method = RequestMethod.POST)
+    ResponseEntity<Account> addAccount(@ApiParam(value = "") @Valid @RequestBody AccountDto account) throws IllegalAccessException;
 
 
-    @Operation(summary = "delete the account with the specific IBAN", description = "", tags={ "Accounts" })
+    @Operation(summary = "Delete the account with the specific IBAN", description = "Delete an account | employees only", tags = {"employees"})
     @io.swagger.annotations.ApiResponses(value = {
-            @io.swagger.annotations.ApiResponse(code = 200, message = "Succesfull"),
-            @io.swagger.annotations.ApiResponse(code = 400, message = "bad request", response = String.class),
-            @io.swagger.annotations.ApiResponse(code = 401, message = "Unauthorized"),
-            @io.swagger.annotations.ApiResponse(code = 404, message = "The requested resource could not be found", response = String.class) })
+            @io.swagger.annotations.ApiResponse(code = 200, message = "Account has been deleted successfully "),
+            @io.swagger.annotations.ApiResponse(code = 403, message = "Forbidden"),
+    })
     @RequestMapping(value = "/accounts/{iban}",
-            produces = { "application/json" },
+            produces = {"application/json"},
             method = RequestMethod.DELETE)
-    void deleteAccount(@ApiParam(value = "IBAN to delete",required=true) @PathVariable("iban") String iban
-    );
+    void deleteAccount(@ApiParam(value = "", required = true) @PathVariable("iban") String iban
+    ) throws NotFoundException;
 
 
-    @Operation(summary = "update the given account", description = "update account ", security = {
-            @SecurityRequirement(name = "bearerAuth")    }, tags={ "Accounts" })
+    @Operation(summary = "Update the given account", description = "Customer ( its accounts ) & Employee ", security = {
+            @SecurityRequirement(name = "bearerAuth")}, tags = {"employees", "customers"})
     @io.swagger.annotations.ApiResponses(value = {
-            @io.swagger.annotations.ApiResponse(code = 200, message = "list of returned accounts"),
-            @io.swagger.annotations.ApiResponse(code = 400, message = "bad request"),
+            @io.swagger.annotations.ApiResponse(code = 200, message = "Account has been modified successfully "),
+            @io.swagger.annotations.ApiResponse(code = 403, message = "Forbidden"),
             @io.swagger.annotations.ApiResponse(code = 401, message = "Unauthorized"),
-            @io.swagger.annotations.ApiResponse(code = 409, message = "already exists"),
-            @io.swagger.annotations.ApiResponse(code = 404, message = "The specified resource was not found")
     })
     @RequestMapping(value = "/accounts/update/{iban}",
-            produces = { "application/json" },
-            consumes = { "application/json" },
+            produces = {"application/json"},
+            consumes = {"application/json"},
             method = RequestMethod.PUT)
-    ResponseEntity<Account> updateAccount(@Parameter(in = ParameterIn.PATH, description = "", required=true, schema=@Schema()) @PathVariable("iban") String iban
-            ,@Parameter(in = ParameterIn.DEFAULT, description = "", schema=@Schema()) @Valid @RequestBody AccountDto body);
+    ResponseEntity<Account> updateAccount(@Parameter(in = ParameterIn.PATH, description = "Iban of the account", required = true, schema = @Schema()) @PathVariable("iban") String iban
+            , @Parameter(in = ParameterIn.DEFAULT, description = "Body of the account to edit", schema = @Schema()) @Valid @RequestBody AccountDto body);
+
 
 }
 
