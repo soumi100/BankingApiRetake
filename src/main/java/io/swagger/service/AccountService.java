@@ -5,6 +5,7 @@ import io.swagger.model.AccountDto;
 import io.swagger.repository.AccountRepository;
 import io.swagger.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -29,7 +30,6 @@ public class AccountService {
     public List<Account> getAccounts() {
         return (List<Account>) accountRepository.findAll();
     }
-
     public Account getAccountByIban(String iban) {
         Account account = accountRepository.getAccountByIban(iban);
         if (Objects.isNull(account)) {
@@ -67,7 +67,7 @@ public class AccountService {
         if (authenticationService.isEmployee()) {
             if (accountRepository.getAccountByIban(iban) != null) {
                 transactionRepository.findAll().forEach(transaction -> {
-                    if (transaction.getAccountFrom().equals(iban) || transaction.getAccountFrom().equals(iban)) {
+                    if (transaction.getAccountFrom().equals(iban) || transaction.getAccountTo().equals(iban)) {
                         transactionRepository.deleteById(transaction.getId());
                     }
                 });
@@ -82,7 +82,7 @@ public class AccountService {
         Account accountToUpdate = accountRepository.getAccountByIban(iban);
         if (authenticationService.isEmployee()) {
             if (accountRepository.getAccountByIban(iban) != null) {
-                accountToUpdate.setActive(newUpdatedAccount.getActive());
+                //accountToUpdate.setActive(newUpdatedAccount.getActive());
                 accountToUpdate.setType(newUpdatedAccount.getType());
                 accountToUpdate.setCurrency(newUpdatedAccount.getCurrency());
                 accountRepository.save(accountToUpdate);
