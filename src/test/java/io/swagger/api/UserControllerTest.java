@@ -42,6 +42,7 @@ public class UserControllerTest {
 
     public void setup() {
         user = new User(2L, "prinsalvino", "test123", "prins", "alvino", "prinsalvino@gmx.com", LocalDate.of(1993, 8, 02), "Rijswijk", "1156AX", "Amsterdam", "062535199", User.TypeEnum.EMPLOYEE, true);
+
     }
 
     @Test
@@ -90,7 +91,5 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
     }
-
-    @Test
     
 }

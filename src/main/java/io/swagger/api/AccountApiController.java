@@ -39,7 +39,7 @@ public class AccountApiController implements AccountApi {
     }
 
     @Override
-    public ResponseEntity<List<Account>> getAccounts(@RequestParam(value = "limit", required = false, defaultValue = "3") Integer limit) {
+    public ResponseEntity<List<Account>> getAccounts(@RequestParam(value = "limit", required = false, defaultValue = "1") Integer limit) {
 
         List<Account> accountArrayList = new ArrayList<>();
         if (limit < 0) {
@@ -71,7 +71,6 @@ public class AccountApiController implements AccountApi {
         if (!authenticationService.isEmployee()) {
 
             if (authenticationService.getCurrentUser().getId() == null) {
-
                 return new ResponseEntity<Account>(HttpStatus.UNAUTHORIZED);
             } else if (!account.getUserId().equals(authenticationService.getCurrentUser().getId())) {
                 // don't have sufficient privileges
