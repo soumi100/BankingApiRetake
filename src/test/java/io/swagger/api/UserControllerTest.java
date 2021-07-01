@@ -38,6 +38,7 @@ public class UserControllerTest {
     @MockBean
     private AuthenticationService authenticationService;
 
+
     private User user;
 
     public void setup() {
@@ -90,7 +91,4 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
     }
-
-    @Test
-    
 }
