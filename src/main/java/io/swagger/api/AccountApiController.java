@@ -71,7 +71,6 @@ public class AccountApiController implements AccountApi {
         if (!authenticationService.isEmployee()) {
 
             if (authenticationService.getCurrentUser().getId() == null) {
-
                 return new ResponseEntity<Account>(HttpStatus.UNAUTHORIZED);
             } else if (!account.getUserId().equals(authenticationService.getCurrentUser().getId())) {
                 // don't have sufficient privileges
