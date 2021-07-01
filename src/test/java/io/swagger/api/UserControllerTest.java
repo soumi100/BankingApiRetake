@@ -1,4 +1,4 @@
-package io.swagger;
+package io.swagger.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.model.User;
