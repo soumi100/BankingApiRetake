@@ -6,6 +6,7 @@ import io.swagger.service.AccountService;
 import io.swagger.service.AuthenticationService;
 import io.swagger.service.UserService;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -46,6 +47,7 @@ class AccountApiControllerTest {
 
     private Account account1;
 
+    @BeforeEach
     public void setUp()  {
         account1 = new Account(1l, Account.TypeEnum.CURRENT,
                 Account.CurrencyEnum.EUR, true, "NL01INHO00000000010", 9989);
@@ -55,7 +57,6 @@ class AccountApiControllerTest {
     @Test
     @WithMockUser(username = "SB", password = "pass123", authorities = "ROLE_EMPLOYEE")
     public void callingGetAccountsByAnEmployeeShouldReturnJsonArray() throws Exception {
-        setUp();
         Mockito.when(authenticationService.isEmployee()).thenReturn(true);
         Mockito.when(accountService.getAccounts()).thenReturn(Arrays.asList(account1));
         this.mockMvc.perform(get("/accounts")).andExpect(status().isOk()).
@@ -64,21 +65,8 @@ class AccountApiControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "SB", password = "pass123", authorities = "ROLE_CUSTOMER")
-    public void callingGetAccountByIbanShouldReturnUnauthorized() throws Exception {
-        setUp();
-        Mockito.when(authenticationService.getCurrentUser().getId()).thenReturn(null);
-        Mockito.when(accountService.getAccountByIban("NL01INHO00000000010")).thenReturn(account1);
-        this.mockMvc
-                .perform(get("/accounts/NL01INHO00000000010")
-                        .contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
     @WithMockUser(username = "SB", password = "pass123", authorities = "ROLE_EMPLOYEE")
     void getAccountByIBAN() throws Exception {
-        setUp();
         Mockito.when(authenticationService.isEmployee()).thenReturn(true);
         Mockito.when(accountService.getAccountByIban("NL01INHO00000000010")).thenReturn(account1);
         this.mockMvc
@@ -91,7 +79,6 @@ class AccountApiControllerTest {
     @WithMockUser(username = "SB", password = "pass123", authorities = "ROLE_EMPLOYEE")
     void addAccount() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        setUp();
         Mockito.when(authenticationService.isEmployee()).thenReturn(true);
         this.mockMvc
                 .perform(post("/accounts")
@@ -104,13 +91,22 @@ class AccountApiControllerTest {
     @Test
     @WithMockUser(username = "SB", password = "pass123", authorities = "ROLE_EMPLOYEE")
     void deleteAccount() throws Exception {
-        setUp();
         Mockito.when(authenticationService.isEmployee()).thenReturn(true);
         Mockito.when(accountService.getAccountByIban("NL01INHO00000000010")).thenReturn(account1);
         this.mockMvc
                 .perform(delete("/accounts/NL01INHO00000000010")
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
+    }
+    @Test
+    @WithMockUser(username = "SB", password = "pass123", authorities = "ROLE_CUSTOMER")
+    public void callingGetAccountByIbanShouldReturnUnauthorized() throws Exception {
+        Mockito.when(authenticationService.getCurrentUser().getId()).thenReturn(null);
+        Mockito.when(accountService.getAccountByIban("NL01INHO00000000010")).thenReturn(account1);
+        this.mockMvc
+                .perform(get("/accounts/NL01INHO00000000010")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isUnauthorized());
     }
 
 }

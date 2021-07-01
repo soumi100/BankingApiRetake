@@ -6,6 +6,7 @@ import io.swagger.model.UserDTO;
 import io.swagger.service.AuthenticationService;
 import io.swagger.service.UserService;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,7 @@ public class UserControllerTest {
 
     private User user;
 
+    @BeforeEach
     public void setup() {
         user = new User(2L, "prinsalvino", "test123", "prins", "alvino", "prinsalvino@gmx.com", LocalDate.of(1993, 8, 02), "Rijswijk", "1156AX", "Amsterdam", "062535199", User.TypeEnum.EMPLOYEE, true);
 
@@ -48,7 +50,6 @@ public class UserControllerTest {
     @Test
     @WithMockUser(username = "prinsalvino", password = "test123", authorities = "ROLE_EMPLOYEE")
     public void callingAllUsersShouldReturnJsonArray() throws Exception {
-        setup();
         Mockito.when(authenticationService.isEmployee()).thenReturn(true);
         Mockito.when(userService.getAllUser()).thenReturn(Arrays.asList(user));
         this.mockMvc.perform(get("/users")).andExpect(status().isOk()).
@@ -60,7 +61,6 @@ public class UserControllerTest {
     @WithMockUser(username = "prinsalvino", password = "test123", authorities = "ROLE_EMPLOYEE")
     public void postingAUserShouldReturn201Created() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        setup();
         Mockito.when(authenticationService.isEmployee()).thenReturn(true);
         this.mockMvc
                 .perform(
@@ -83,7 +83,6 @@ public class UserControllerTest {
     @Test
     @WithMockUser(username = "prinsalvino", password = "test123", authorities = "ROLE_EMPLOYEE")
     public void deletingAUserShouldReturn200() throws Exception {
-        setup();
         Mockito.when(authenticationService.isEmployee()).thenReturn(true);
         Mockito.when(userService.getById(2L)).thenReturn(user);
         this.mockMvc
