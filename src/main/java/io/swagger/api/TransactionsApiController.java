@@ -111,7 +111,7 @@ public class TransactionsApiController implements TransactionsApi {
 
             OffsetDateTime dtm = OffsetDateTime.now();
             newTransaction.setTimestamp(dtm);
-            transactionService.createTransaction(newTransaction);
+            transactionService.createTransaction(newTransaction); //
             return true;
         } else {
             return false;
