@@ -22,7 +22,7 @@ public class Stepdefs {
     }
     @When("visiting accounts endpoint")
     public void visiting_accounts_endpoint() {
-        url = "http://localhost:8484/accounts/NL71INHO09631273"
+        url = "http://localhost:8484/accounts"
     }
     @Then("display the account matching the given iban")
     public void display_the_account_matching_the_given_iban() {
