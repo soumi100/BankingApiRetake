@@ -3,7 +3,7 @@ Feature: account
   Background:
     Given http://localhost:8484/login
     And Do login as employee
-    And visiting accounts endpoint
+    And visiting http://localhost:8484/accounts
 
   Scenario: Get Account by IBAN
     Given account iban is set in the url

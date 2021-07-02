@@ -2,8 +2,8 @@ Feature: Users
 
   Background:
     Given http://localhost:8484/login
-    And Do login as user as employee
-    And visiting users endpoint
+    And Do login as employee
+    And visiting http://localhost:8484/users
 
   Scenario: Get Users
     Given the http verb is GET
@@ -16,5 +16,6 @@ Feature: Users
     Then user should be created
 
   Scenario: Get User by ID
+    Given the http verb is Post
     Given the user id is set in the url
     Then display the user matching the given id

@@ -16,5 +16,6 @@ Feature: Users
     Then user should be created
 
   Scenario: Get User by ID
+    Given the http verb is Post
     Given the user id is set in the url
     Then display the user matching the given id
