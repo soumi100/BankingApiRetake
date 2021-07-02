@@ -126,6 +126,12 @@
             <version>[1.0.0,)</version>
             <scope>test</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-java -->
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>5.7.0</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
