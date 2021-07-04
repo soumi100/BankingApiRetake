@@ -44,22 +44,39 @@ public class TransactionsApiController implements TransactionsApi {
 
     @Override
     public ResponseEntity<List<Transaction>> getTransactions(Integer limit) {
-        System.out.println(limit);
-        List<Transaction> transactions = transactionService.getTransactions();
-        if (limit == null || transactions.size() < limit) {
-            limit = transactions.size();
+
+        if (authenticationService.isEmployee()) {
+            {
+                System.out.println(limit);
+                List<Transaction> transactions = transactionService.getTransactions();
+                if (limit == null || transactions.size() < limit) {
+                    limit = transactions.size();
+                }
+                return new ResponseEntity<List<Transaction>>(transactions.subList(0, limit), HttpStatus.OK)
+                        .status(200)
+                        .body(transactions.subList(0, limit));
+            }
         }
-        return new ResponseEntity<List<Transaction>>(transactions.subList(0, limit), HttpStatus.OK)
-                .status(200)
-                .body(transactions.subList(0, limit));
+        else {
+            return new ResponseEntity<List<Transaction>>(HttpStatus.UNAUTHORIZED);
+
+        }
     }
 
     @Override
     public ResponseEntity<List<Transaction>> getTransactionByIban(String iban) throws NotFoundException {
-        List<Transaction> transactions = (List<Transaction>) transactionService.getTransactionByIban(iban);
-        return ResponseEntity
-                .status(200)
-                .body(transactions);
+        if (authenticationService.isEmployee()) {
+            {
+                List<Transaction> transactions = (List<Transaction>) transactionService.getTransactionByIban(iban);
+                return ResponseEntity
+                        .status(200)
+                        .body(transactions);
+            }
+        }
+        else {
+            return new ResponseEntity<List<Transaction>>(HttpStatus.UNAUTHORIZED);
+
+        }
     }
 
     @Override
