@@ -39,6 +39,7 @@ public class UserControllerTest {
     @MockBean
     private AuthenticationService authenticationService;
 
+
     private User user;
 
     @BeforeEach
