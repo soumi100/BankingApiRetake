@@ -19,6 +19,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.threeten.bp.LocalDate;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -38,13 +40,7 @@ class TransactionsApiControllerTest {
     @MockBean
     private AuthenticationService authenticationService;
 
-    @Autowired
-    @MockBean
-    private UserService userService;
 
-    @Autowired
-    @MockBean
-    private TransactionRepository transactionRepository;
 
     private Transaction transaction;
 
@@ -58,11 +54,11 @@ class TransactionsApiControllerTest {
                         700d, "greece dinner", 1L, Transaction.TransactionTypeEnum.TRANSFER);
     }
     @Test
-    @WithMockUser(username = "SB", password = "pass123", authorities = "ROLE_EMPLOYEE")
-    public void callingGetTransactionShouldReturn200() throws Exception {
-        Mockito.when(authenticationService.isEmployee()).thenReturn(true);
+    @WithMockUser(username = "prinsalvino", password = "test123", authorities = "ROLE_EMPLOYEE")
+    public void test() throws Exception {
+        Mockito.when(authenticationService.isEmployee()).thenReturn(false);
         Mockito.when(transactionService.getTransactions()).thenReturn(Arrays.asList(transaction));
-        this.mockMvc.perform(get("/accounts")).andExpect(status().isOk()).
+        this.mockMvc.perform(get("/transactions")).andExpect(status().isOk()).
                 andExpect(jsonPath("$", Matchers.hasSize(1)));
     }
 
