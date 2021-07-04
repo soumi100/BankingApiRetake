@@ -59,7 +59,7 @@ class TransactionsApiControllerTest {
     }
     @Test
     @WithMockUser(username = "SB", password = "pass123", authorities = "ROLE_EMPLOYEE")
-    public void callingGetTransactionShouldReturnJsonArray() throws Exception {
+    public void callingGetTransactionShouldReturn200() throws Exception {
         Mockito.when(authenticationService.isEmployee()).thenReturn(true);
         Mockito.when(transactionService.getTransactions()).thenReturn(Arrays.asList(transaction));
         this.mockMvc.perform(get("/accounts")).andExpect(status().isOk()).
