@@ -1,8 +1,8 @@
 package io.swagger.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.model.Account;
 import io.swagger.model.Transaction;
-import io.swagger.model.User;
 import io.swagger.service.*;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,13 +11,12 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.threeten.bp.LocalDate;
 
 import java.util.Arrays;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -42,19 +41,8 @@ class TransactionsApiControllerTest {
 
     private Transaction transaction;
 
-    @Autowired
-    PasswordEncoder encoder;
-
-
     @BeforeEach
     public void setUp()  {
-
-        User soumia =  new User(1L, "SB", "pass123",
-                "soumia", "bouhouri", "sou@gmx.com",
-                LocalDate.of(1993, 8, 02),
-                "Rijswijk", "2282JV", "Rijswijk", "062535199",
-                User.TypeEnum.EMPLOYEE, true);
-
         this.transaction = new Transaction
                 ("NL01INHO00000000010", "NL01INHO00000000080",
                         700d, "greece dinner", 1L, Transaction.TransactionTypeEnum.TRANSFER);
