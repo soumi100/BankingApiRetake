@@ -41,6 +41,7 @@ class TransactionsApiControllerTest {
     private AuthenticationService authenticationService;
 
     private Transaction transaction;
+    private User soumia;
 
     @Autowired
     PasswordEncoder encoder;
@@ -49,7 +50,7 @@ class TransactionsApiControllerTest {
     @BeforeEach
     public void setUp()  {
 
-        User soumia =  new User(1L, "SB", "pass123",
+        this.soumia =  new User(1L, "SB", "pass123",
                 "soumia", "bouhouri", "sou@gmx.com",
                 LocalDate.of(1993, 8, 02),
                 "Rijswijk", "2282JV", "Rijswijk", "062535199",
