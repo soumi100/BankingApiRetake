@@ -65,7 +65,7 @@ class TransactionsApiControllerTest {
     //but user will only get transaction by their own iban so we combine it here using an employee only for test
     @Test
     @WithMockUser(username = "SB", password = "pass123", authorities = "ROLE_EMPLOYEE")
-    public void callingGetTransactionShouldReturnJsonArray() throws Exception {
+    public void callingGetTransactionShouldReturn200() throws Exception {
         Mockito.when(authenticationService.isEmployee()).thenReturn(true);
         Mockito.when(transactionService.getTransactions()).thenReturn(Arrays.asList(transaction));
         this.mockMvc.perform(get("/transactions")).andExpect(status().isOk()).
