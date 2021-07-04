@@ -101,7 +101,7 @@ class AccountApiControllerTest {
     @Test
     @WithMockUser(username = "SB", password = "pass123", authorities = "ROLE_CUSTOMER")
     public void callingGetAccountByIbanShouldReturnUnauthorized() throws Exception {
-        Mockito.when(authenticationService.getCurrentUser().getId()).thenReturn(null);
+        Mockito.when(authenticationService.getCurrentUser().getId());
         Mockito.when(accountService.getAccountByIban("NL01INHO00000000010")).thenReturn(account1);
         this.mockMvc
                 .perform(get("/accounts/NL01INHO00000000010")

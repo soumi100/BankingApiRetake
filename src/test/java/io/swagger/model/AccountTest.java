@@ -1,5 +1,6 @@
 package io.swagger.model;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,29 +17,45 @@ class AccountTest {
 
     @BeforeEach
     public void before() throws Exception {
-        User soumia =  new User(1L, "SB", "pass123",
-                "soumia", "bouhouri", "sou@gmx.com",
-                LocalDate.of(1993, 8, 02),
-                "Rijswijk", "2282JV", "Rijswijk", "062535199",
-                User.TypeEnum.EMPLOYEE, true);
         this.account = new Account(1l, Account.TypeEnum.CURRENT,
                 Account.CurrencyEnum.EUR, true, "NL01INHO00000000010", 9989);
     }
 
     @Test
     public void createAccountShouldNotBeNull() {
-        Account account1 = new Account();
-        assertNotNull(account1);
+        assertNotNull(account);
     }
-
     @Test
-    public void testSetBalance() throws Exception {
-        //set the Balance
-        account.setBalance(Integer.valueOf(7000));
-        Integer expected = Integer.valueOf(7000);
-
-        Integer actual = account.getBalance();
-        assertEquals(expected, actual);
+    public void invalidCurrencyShouldThrowIllegalArgumentException(){
+        String currencyInput = "EUR";
+        boolean isValid = false;
+        for (Account.CurrencyEnum c : Account.CurrencyEnum.values()){
+            if (c.name().equals(currencyInput)) {
+                isValid = true;
+            }
+        }
+        if (!isValid) throw new IllegalArgumentException("Currency is not valid!");
+    }
+    @Test
+    public void accountBalanceShouldBeAboveZero(){
+        account.setBalance(5);
+        Assert.assertTrue(account.getBalance() > 0);
+    }
+    @Test
+    public void newAccountShouldBeActive(){
+        Account account = new Account();
+        Assert.assertTrue(account.isActive());
+    }
+    @Test
+    public void invalidTypeShouldThrowIllegalArgumentException(){
+        String accountType = "SAVINGS";
+        boolean isValid = false;
+        for (Account.TypeEnum c : Account.TypeEnum.values()){
+            if (c.name().equals(accountType)) {
+                isValid = true;
+            }
+        }
+        if (!isValid) throw new IllegalArgumentException("Type is not valid!");
     }
     @Test
     public void testAccounIBAN() throws Exception {
