@@ -7,14 +7,14 @@ Feature: transaction
 
   Scenario: Get transactions by IBAN
     Given account iban is set in the url
-    Then display the account matching the given iban
+    Then I get http status 200
 
   Scenario: Get transactions
     Given the http verb is GET
     And limit is set (optional)
-    Then return a list of all accounts
+    Then I get http status 200
 
   Scenario: Create transaction
     Given the http verb is Post
     And account is set in the request body
-    Then save the account to the database
+    Then I get http status 201
