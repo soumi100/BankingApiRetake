@@ -41,28 +41,33 @@ class UserTest {
         Assert.assertTrue(today.compareTo(birthDate) > 0);
     }
     @Test
-    public void transactionDescriptionShouldNotBeNull() {
+    public void phoneNumberShouldBe10Digit() {
         String phoneNumber = "0618913710";
         pattern = Pattern.compile(PHONE_VERIFICATION);
         matcher = pattern.matcher(phoneNumber);
+        Assert.assertTrue(matcher.matches());
     }
 
     @Test
-    public void testFromIBAN() throws Exception {
-//        String expected = "NL01INHO00000000010";
-//        String actual = transaction.getAccountFrom();
-//        // Test if equal
-//        assertEquals(expected, actual);
+    public void phoneNumberShouldNotContainAlphabet() {
+        String phoneNumber = "P618913710";
+        pattern = Pattern.compile(PHONE_VERIFICATION);
+        matcher = pattern.matcher(phoneNumber);
+        Assert.assertFalse(matcher.matches());
     }
 
     @Test
-    public void testToIBAN() throws Exception {
-//        String expected = "NL01INHO00000000080";
-//        String actual = transaction.getAccountTo();
-//        // Test if equal
-//        assertEquals(expected, actual);
+    public void emailShouldBeValid() throws Exception {
+        String email = "prinsalvino@gmmx.com";
+        pattern = Pattern.compile(regexEmail);
+        matcher = pattern.matcher(email);
+        assertTrue( matcher.matches());
     }
-
-
-
+    @Test
+    public void emailNotCompleteIsFalse() throws Exception {
+        String email = "prinsalvinogmmx.com";
+        pattern = Pattern.compile(regexEmail);
+        matcher = pattern.matcher(email);
+        assertFalse( matcher.matches());
+    }
 }

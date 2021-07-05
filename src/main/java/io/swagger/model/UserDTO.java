@@ -20,6 +20,7 @@ public class UserDTO {
     @JsonProperty("password")
     private String password = null;
 
+
     public UserDTO username(String username) {
         this.username = username;
         return this;
