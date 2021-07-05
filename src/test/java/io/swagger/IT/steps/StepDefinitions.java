@@ -110,7 +110,7 @@ public class StepDefinitions {
                 (1L, OffsetDateTime.now(),"NL01INHO00000000010", "NL01INHO00000000080",
                         700d, "greece dinner", 1L, Transaction.TransactionTypeEnum.TRANSFER);
 
-        URI uri = new URI(baseUrl + "/users");
+        URI uri = new URI(baseUrl + "/transactions");
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>(mapper.writeValueAsString(transaction), headers);
         responseEntity = template.postForEntity(uri, entity, String.class);
