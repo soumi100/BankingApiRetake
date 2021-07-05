@@ -104,7 +104,7 @@ public class StepDefinitions {
     }
 
     @Given("User is creating a new transaction")
-    public void userIsCreatingANewTransaction() throws URISyntaxException{
+    public void userIsCreatingANewTransaction() throws URISyntaxException, JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Transaction transaction = new Transaction
                 (1L, OffsetDateTime.now(),"NL01INHO00000000010", "NL01INHO00000000080",
