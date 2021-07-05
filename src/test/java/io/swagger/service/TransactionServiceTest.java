@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 public class TransactionServiceTest {
+    @Autowired
     @Mock
     private TransactionRepository transactionRepository;
 
