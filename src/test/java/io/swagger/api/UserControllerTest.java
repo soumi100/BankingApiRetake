@@ -39,6 +39,9 @@ public class UserControllerTest {
     @MockBean
     private AuthenticationService authenticationService;
 
+    ObjectMapper objectMapper = new ObjectMapper();
+
+
 
     private User user;
 
@@ -73,7 +76,6 @@ public class UserControllerTest {
 
     @Test
     public void loginShouldReturn200() throws Exception {
-        ObjectMapper objectMapper = new ObjectMapper();
         UserDTO userDTO = new UserDTO();
         userDTO.setUsername("prinsalvino");
         userDTO.setPassword("test123");
@@ -90,6 +92,36 @@ public class UserControllerTest {
                 .perform(delete("/user/2")
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "prinsalvino", password = "test123", authorities = "ROLE_EMPLOYEE")
+    public void updatingNoUserShouldReturnOK() throws Exception {
+        Mockito.when(authenticationService.isEmployee()).thenReturn(true);
+        Mockito.when(userService.getById(2L)).thenReturn(user);
+        this.mockMvc
+                .perform(put("/user/2")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE).content(objectMapper.writeValueAsString(user)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "prinsalvino", password = "test123", authorities = "ROLE_EMPLOYEE")
+    public void callingAUserByIdShouldReturnJsonArray() throws Exception {
+        Mockito.when(authenticationService.isEmployee()).thenReturn(false);
+        Mockito.when( authenticationService.getCurrentUser()).thenReturn(user);
+        Mockito.when(userService.getById(2L)).thenReturn(user);
+        this.mockMvc.perform(get("/user/2")).andExpect(status().isOk()).
+              andExpect(jsonPath("$.username").value(user.getUsername()));
+    }
+
+    @Test
+    @WithMockUser(username = "prinsalvino", password = "test123", authorities = "ROLE_EMPLOYEE")
+    public void callingAUserByIdShouldReturn403() throws Exception {
+        Mockito.when(authenticationService.isEmployee()).thenReturn(false);
+        Mockito.when( authenticationService.getCurrentUser()).thenReturn(user);
+        Mockito.when(userService.getById(2L)).thenReturn(user);
+        this.mockMvc.perform(get("/user/3")).andExpect(status().isForbidden());
     }
     
 }

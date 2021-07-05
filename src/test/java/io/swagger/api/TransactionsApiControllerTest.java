@@ -1,27 +1,35 @@
 package io.swagger.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.model.Account;
 import io.swagger.model.Transaction;
-import io.swagger.service.*;
+import io.swagger.service.AccountService;
+import io.swagger.service.AuthenticationService;
+import io.swagger.service.TransactionService;
+
+import io.swagger.service.UserService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.OffsetDateTime;
 
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@SpringBootTest
+@AutoConfigureMockMvc
 class TransactionsApiControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -39,12 +47,16 @@ class TransactionsApiControllerTest {
     @MockBean
     private AuthenticationService authenticationService;
 
+    @Autowired
+    @MockBean
+    private UserService userService;
+
     private Transaction transaction;
 
     @BeforeEach
     public void setUp()  {
         this.transaction = new Transaction
-                ("NL01INHO00000000010", "NL01INHO00000000080",
+                (1L, OffsetDateTime.now(),"NL01INHO00000000010", "NL01INHO00000000080",
                         700d, "greece dinner", 1L, Transaction.TransactionTypeEnum.TRANSFER);
     }
 
@@ -57,7 +69,7 @@ class TransactionsApiControllerTest {
         Mockito.when(transactionService.getTransactions()).thenReturn(Arrays.asList(transaction));
         this.mockMvc.perform(get("/transactions")).andExpect(status().isOk()).
                 andExpect(jsonPath("$", Matchers.hasSize(1)))
-                .andExpect(jsonPath("$[0].Id").value(transaction.getId()));
+                .andExpect(jsonPath("$[0].id").value(transaction.getId()));
     }
 
     @Test
