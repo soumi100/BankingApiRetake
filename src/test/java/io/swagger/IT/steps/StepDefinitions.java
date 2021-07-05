@@ -2,6 +2,7 @@ package io.swagger.IT.steps;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -78,5 +79,29 @@ public class StepDefinitions {
         URI uri = new URI(baseUrl + "/user/1");
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
         responseEntity = template.getForEntity(uri, String.class);
+    }
+    //transaction
+
+    @And("visiting http:\\/\\/localhost:{int}\\/transactions")
+    public void visitingHttpLocalhostTransactions(int arg0) {
+
+    }
+
+    @When("I retrieve all transactions by IBAN")
+    public void iRetrieveAllTransactionsByIBAN() {
+        URI uri = new URI(baseUrl);
+        HttpEntity<String> entity = new HttpEntity<>(null, headers);
+        responseEntity = template.getForEntity(uri, String.class);
+    }
+
+    @When("I retrieve all transactions")
+    public void iRetrieveAllTransactions() {
+        URI uri = new URI(baseUrl);
+        HttpEntity<String> entity = new HttpEntity<>(null, headers);
+        responseEntity = template.getForEntity(uri, String.class);
+    }
+
+    @Given("User is creating a new transaction")
+    public void userIsCreatingANewTransaction() {
     }
 }
