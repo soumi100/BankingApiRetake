@@ -6,6 +6,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.swagger.model.Transaction;
 import io.swagger.model.User;
 import io.swagger.model.UserDTO;
 import org.json.JSONArray;
@@ -19,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.threeten.bp.LocalDate;
+import org.threeten.bp.OffsetDateTime;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -89,20 +91,29 @@ public class StepDefinitions {
     }
 
     @When("I retrieve all transactions by IBAN")
-    public void iRetrieveAllTransactionsByIBAN() {
-        URI uri = new URI(baseUrl);
+    public void iRetrieveAllTransactionsByIBAN() throws URISyntaxException {
+        URI uri = new URI(baseUrl + "/transactions/{IBAN}");
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
         responseEntity = template.getForEntity(uri, String.class);
     }
 
     @When("I retrieve all transactions")
-    public void iRetrieveAllTransactions() {
-        URI uri = new URI(baseUrl);
+    public void iRetrieveAllTransactions() throws URISyntaxException{
+        URI uri = new URI(baseUrl+"/transactions");
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
         responseEntity = template.getForEntity(uri, String.class);
     }
 
     @Given("User is creating a new transaction")
-    public void userIsCreatingANewTransaction() {
+    public void userIsCreatingANewTransaction() throws URISyntaxException{
+        ObjectMapper mapper = new ObjectMapper();
+        Transaction transaction = new Transaction
+                (1L, OffsetDateTime.now(),"NL01INHO00000000010", "NL01INHO00000000080",
+                        700d, "greece dinner", 1L, Transaction.TransactionTypeEnum.TRANSFER);
+
+        URI uri = new URI(baseUrl + "/users");
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<>(mapper.writeValueAsString(transaction), headers);
+        responseEntity = template.postForEntity(uri, entity, String.class);
     }
 }
