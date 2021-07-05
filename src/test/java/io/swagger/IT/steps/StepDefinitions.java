@@ -79,34 +79,4 @@ public class StepDefinitions {
         HttpEntity<String> entity = new HttpEntity<>(mapper.writeValueAsString(user), headers);
         responseEntity = template.postForEntity(uri, entity, String.class);
     }
-
-    @Then("user should be created")
-    public void userShouldBeCreated() {
-    }
-
-
-
-//    @When("I retrieve guitar with id {int}")
-//    public void iRetrieveGuitarWithId(int id) throws URISyntaxException {
-//        URI uri = new URI(baseUrl + "/" + id);
-//        responseEntity = template.getForEntity(uri, String.class);
-//    }
-//
-//    @Then("The guitar brand is {string}")
-//    public void theGuitarBrandIs(String brand) throws JSONException {
-//        response = responseEntity.getBody();
-//        Assert.assertEquals(brand,
-//                new JSONObject(response)
-//                        .getString("brand"));
-//    }
-//
-//    @When("I post a guitar")
-//    public void iPostAGuitar() throws JsonProcessingException, URISyntaxException {
-//        ObjectMapper mapper = new ObjectMapper();
-//        Guitar guitar = new Guitar("Gibson", "Flying V", 2599);
-//        URI uri = new URI(baseUrl);
-//        headers.setContentType(MediaType.APPLICATION_JSON);
-//        HttpEntity<String> entity = new HttpEntity<>(mapper.writeValueAsString(guitar), headers);
-//        responseEntity = template.postForEntity(uri, entity, String.class);
-//    }
 }
