@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.OffsetDateTime;
@@ -43,7 +44,7 @@ public class TransactionControllerTest {
     private TransactionService transactionService;
 
     @Autowired
-    @Mock
+    @MockBean
     private TransactionRepository transactionRepository;
 
     @Autowired
@@ -61,7 +62,7 @@ public class TransactionControllerTest {
 
     @BeforeEach
     public void setup() {
-        user = new User(2L, "prinsalvino", "test123", "prins", "alvino", "prinsalvino@gmx.com", LocalDate.of(1993, 8, 02), "Rijswijk", "1156AX", "Amsterdam", "062535199", User.TypeEnum.EMPLOYEE, true);
+        this.user = new User(2L, "prinsalvino", "test123", "prins", "alvino", "prinsalvino@gmx.com", LocalDate.of(1993, 8, 02), "Rijswijk", "1156AX", "Amsterdam", "062535199", User.TypeEnum.EMPLOYEE, true);
 
         this.testTransaction = new Transaction
                 ("NL01INHO00000000010", "NL01INHO00000000080",
@@ -69,11 +70,13 @@ public class TransactionControllerTest {
 
         transactionList.add(testTransaction);
         //transactionList.forEach(transactionRepository::save);
-        objectMapper = new ObjectMapper();
+
     }
 
     @Test
+    @WithMockUser(username = "prinsalvino", password = "test123", authorities = "ROLE_EMPLOYEE")
     public void createTransactionShouldReturn200() throws Exception {
+        objectMapper = new ObjectMapper();
         TransactionDto transactionDto = new TransactionDto();
         transactionDto.setId(1L);
         transactionDto.setAccountFrom(testTransaction.getAccountFrom());
@@ -83,12 +86,12 @@ public class TransactionControllerTest {
         transactionDto.setUserPerformingId(testTransaction.getUserPerformingId());
         OffsetDateTime dtm = OffsetDateTime.now();
         transactionDto.setTimestamp(dtm);
-        this.mockMvc.perform(post("/transactions").contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(objectMapper.writeValueAsString(transactionDto))).andExpect(status().isOk());
+        this.mockMvc
+                .perform(
+                        post("/transactions")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .content(objectMapper.writeValueAsString(testTransaction)))
+                .andExpect(status().isCreated());
     }
 
-    /*@Test
-    public void transactionRepositoryNotNull(){
-        assertNotNull(transactionRepository);
-    } */
 }
