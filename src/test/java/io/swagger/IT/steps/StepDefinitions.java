@@ -84,6 +84,9 @@ public class StepDefinitions {
     public void userShouldBeCreated() {
     }
 
+    //transaction steps
+
+
 //    @When("I retrieve guitar with id {int}")
 //    public void iRetrieveGuitarWithId(int id) throws URISyntaxException {
 //        URI uri = new URI(baseUrl + "/" + id);
