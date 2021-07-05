@@ -84,7 +84,6 @@ public class StepDefinitions {
     public void userShouldBeCreated() {
     }
 
-    //transaction steps
 
 
 //    @When("I retrieve guitar with id {int}")

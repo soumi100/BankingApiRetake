@@ -1,20 +1,18 @@
 Feature: transaction
 
   Background:
-    Given http://localhost:8484/login
-    And Do login as employee
+    Given User is Logged in
     And visiting http://localhost:8484/transactions
 
   Scenario: Get transactions by IBAN
-    Given account iban is set in the url
+    When I retrieve all transactions by IBAN
     Then I get http status 200
 
   Scenario: Get transactions
-    Given the http verb is GET
-    And limit is set (optional)
+    When I retrieve all transactions
     Then I get http status 200
 
   Scenario: Create transaction
-    Given the http verb is Post
-    And account is set in the request body
+    Given User is creating a new transaction
     Then I get http status 201
+
