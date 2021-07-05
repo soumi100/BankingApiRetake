@@ -40,7 +40,7 @@ public class StepDefinitions {
     @When("I retrieve all users")
     public void iRetrieveAllUsers() throws URISyntaxException {
 
-        URI uri = new URI(baseUrl);
+        URI uri = new URI(baseUrl + "/users");
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
         responseEntity = template.getForEntity(uri, String.class);
     }
@@ -48,13 +48,6 @@ public class StepDefinitions {
     @Then("I get http status {int}")
     public void iGetHttpStatus(int status) {
         Assert.assertEquals(responseEntity.getStatusCodeValue(), status);
-    }
-
-    @Then("I get a list of {int} guitars")
-    public void iGetAListOfGuitars(int size) throws JSONException {
-        response = responseEntity.getBody();
-        JSONArray array = new JSONArray(response);
-        Assert.assertEquals(size, array.length());
     }
 
 
@@ -83,6 +76,12 @@ public class StepDefinitions {
         responseEntity = template.postForEntity(uri, entity, String.class);
     }
 
+    @When("I retrieve a users")
+    public void iRetrieveAUsers() throws URISyntaxException {
+        URI uri = new URI(baseUrl + "/user/1");
+        HttpEntity<String> entity = new HttpEntity<>(null, headers);
+        responseEntity = template.getForEntity(uri, String.class);
+    }
     //transaction
 
     @And("visiting http:\\/\\/localhost:{int}\\/transactions")
