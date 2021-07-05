@@ -72,6 +72,7 @@ class TransactionsApiControllerTest {
                 .andExpect(jsonPath("$[0].id").value(transaction.getId()));
     }
 
+    //if not employee, the request unauthorized
     @Test
     @WithMockUser(username = "SB", password = "pass123", authorities = "ROLE_EMPLOYEE")
     void getTransactionsByIBAN() throws Exception {
