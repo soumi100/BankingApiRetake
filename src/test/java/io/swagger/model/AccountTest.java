@@ -43,7 +43,6 @@ class AccountTest {
     }
     @Test
     public void newAccountShouldBeActive(){
-        Account account = new Account();
         Assert.assertTrue(account.isActive());
     }
     @Test

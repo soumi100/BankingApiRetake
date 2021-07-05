@@ -98,15 +98,5 @@ class AccountApiControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
     }
-    @Test
-    @WithMockUser(username = "SB", password = "pass123", authorities = "ROLE_CUSTOMER")
-    public void callingGetAccountByIbanShouldReturnUnauthorized() throws Exception {
-        Mockito.when(authenticationService.getCurrentUser().getId());
-        Mockito.when(accountService.getAccountByIban("NL01INHO00000000010")).thenReturn(account1);
-        this.mockMvc
-                .perform(get("/accounts/NL01INHO00000000010")
-                        .contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isUnauthorized());
-    }
 
 }
