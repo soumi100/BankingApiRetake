@@ -49,11 +49,18 @@ public class TransactionControllerTest {
 
     @Autowired
     @MockBean
+    TransactionDto transactionDto;
+
+    @Autowired
+    @MockBean
     private AuthenticationService authenticationService;
 
     private Transaction transaction;
 
     List<Transaction> transactionList = new ArrayList<>();
+
+    @Autowired
+    @MockBean
     private Transaction testTransaction;
     ObjectMapper objectMapper;
 
@@ -77,7 +84,7 @@ public class TransactionControllerTest {
     @WithMockUser(username = "prinsalvino", password = "test123", authorities = "ROLE_EMPLOYEE")
     public void createTransactionShouldReturn200() throws Exception {
         objectMapper = new ObjectMapper();
-        TransactionDto transactionDto = new TransactionDto();
+        transactionDto = new TransactionDto();
         transactionDto.setId(1L);
         transactionDto.setAccountFrom(testTransaction.getAccountFrom());
         transactionDto.setAccountTo(testTransaction.getAccountTo());
