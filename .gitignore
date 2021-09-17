@@ -35,3 +35,4 @@ target/classes/io/swagger/Swagger2SpringBoot$ExitException.class
 target/classes/io/swagger/Swagger2SpringBoot.class
 target/test-classes/test/java/io/swagger/controller/UserControllerTest.class
 target/classes/io/swagger/util/JwtUtil.class
+target/classes/
