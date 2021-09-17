@@ -88,14 +88,14 @@ public class StepDefinitions {
     }
 
     @When("I retrieve all transactions by IBAN")
-    public void iRetrieveAllTransactionsByIBAN() {
+    public void iRetrieveAllTransactionsByIBAN() throws URISyntaxException {
         URI uri = new URI(baseUrl);
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
         responseEntity = template.getForEntity(uri, String.class);
     }
 
     @When("I retrieve all transactions")
-    public void iRetrieveAllTransactions() {
+    public void iRetrieveAllTransactions() throws URISyntaxException {
         URI uri = new URI(baseUrl);
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
         responseEntity = template.getForEntity(uri, String.class);
